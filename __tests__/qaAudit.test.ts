@@ -53,12 +53,21 @@ export function runQAAuditTests() {
 
   KOREAN_VOCABULARY.forEach((vocab) => {
     const blocks = getSyllableBlocks(vocab.korean);
-    if (!vocab.id || !vocab.korean || !vocab.romanization || !vocab.translation.en || !vocab.translation.zh || !blocks.length) {
+    if (
+      !vocab.id ||
+      !vocab.korean ||
+      !vocab.romanization ||
+      !vocab.translation.en ||
+      !vocab.translation.zh ||
+      !vocab.culturalNote.en ||
+      !vocab.culturalNote.zh ||
+      !blocks.length
+    ) {
       console.error(`✗ FAIL: Malformed vocabulary item: ${vocab.id}`);
       process.exitCode = 1;
     }
   });
-  console.log('✓ PASS: All vocabulary records pass dynamic schema & translation validation');
+  console.log('✓ PASS: All vocabulary records pass dynamic schema & bilingual translation validation');
 }
 
 if (require.main === module) {

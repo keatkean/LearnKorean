@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { CURATED_VOCABULARY, VocabItem, getSyllableBlocks } from '@/lib/koreanVocabData';
+import { CURATED_VOCABULARY, getSyllableBlocks } from '@/lib/koreanVocabData';
 import { Sparkles, Volume2, Search, X } from 'lucide-react';
 import { Translations, Locale } from '@/lib/i18n';
 
@@ -12,6 +12,15 @@ interface VocabExplorerModalProps {
   locale: Locale;
   t: Translations;
 }
+
+const CATEGORIES: { id: string; label: Record<Locale, string> }[] = [
+  { id: 'all', label: { 'zh-CN': '全部', 'zh-TW': '全部', 'en': 'All' } },
+  { id: 'romance', label: { 'zh-CN': '浪漫金句', 'zh-TW': '浪漫金句', 'en': 'Romance' } },
+  { id: 'kculture', label: { 'zh-CN': '韩国文化', 'zh-TW': '韓國文化', 'en': 'K-Culture' } },
+  { id: 'kdrama', label: { 'zh-CN': '韩剧名言', 'zh-TW': '韓劇名言', 'en': 'K-Drama' } },
+  { id: 'kpop', label: { 'zh-CN': 'K-Pop歌词', 'zh-TW': 'K-Pop歌詞', 'en': 'K-Pop' } },
+  { id: 'essential', label: { 'zh-CN': '日常必备', 'zh-TW': '日常必備', 'en': 'Essential' } },
+];
 
 export const VocabExplorerModal: React.FC<VocabExplorerModalProps> = ({
   isOpen,
@@ -34,6 +43,17 @@ export const VocabExplorerModal: React.FC<VocabExplorerModalProps> = ({
       v.translation.zh.includes(searchTerm);
     return matchesCategory && matchesSearch;
   });
+
+  const getCategoryLabel = (catId: string) => {
+    const found = CATEGORIES.find((c) => c.id === catId);
+    return found ? (found.label[locale] || found.label['en']) : catId;
+  };
+
+  const getBlocksLabel = () => {
+    if (locale === 'zh-CN') return '音节拆解:';
+    if (locale === 'zh-TW') return '音節拆解:';
+    return 'Syllables:';
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in">
@@ -80,17 +100,17 @@ export const VocabExplorerModal: React.FC<VocabExplorerModalProps> = ({
 
           {/* Category Filters */}
           <div className="flex items-center gap-1.5 overflow-x-auto w-full sm:w-auto">
-            {['all', 'romance', 'kculture', 'kdrama', 'kpop', 'essential'].map((cat) => (
+            {CATEGORIES.map((cat) => (
               <button
-                key={cat}
-                onClick={() => setSelectedCategory(cat)}
-                className={`px-3 py-1.5 text-xs font-bold rounded-xl capitalize whitespace-nowrap transition-all ${
-                  selectedCategory === cat
+                key={cat.id}
+                onClick={() => setSelectedCategory(cat.id)}
+                className={`px-3 py-1.5 text-xs font-bold rounded-xl whitespace-nowrap transition-all ${
+                  selectedCategory === cat.id
                     ? 'bg-indigo-600 text-white shadow-md'
                     : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-indigo-50 dark:hover:bg-indigo-950'
                 }`}
               >
-                {cat}
+                {getCategoryLabel(cat.id)}
               </button>
             ))}
           </div>
@@ -101,6 +121,7 @@ export const VocabExplorerModal: React.FC<VocabExplorerModalProps> = ({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {filteredVocab.map((item) => {
             const blocks = getSyllableBlocks(item.korean);
+            const note = item.culturalNote ? (locale === 'en' ? item.culturalNote.en : item.culturalNote.zh) : '';
             return (
               <div
                 key={item.id}
@@ -126,12 +147,12 @@ export const VocabExplorerModal: React.FC<VocabExplorerModalProps> = ({
                 </div>
 
                 <div className="text-xs font-bold text-slate-700 dark:text-slate-300">
-                  {locale === 'zh-CN' ? item.translation.zh : item.translation.en}
+                  {locale === 'en' ? item.translation.en : item.translation.zh}
                 </div>
 
                 {/* Dynamic Syllable Block Extraction */}
                 <div className="flex items-center gap-1.5 pt-1 border-t border-slate-200/60 dark:border-slate-700/60">
-                  <span className="text-[10px] text-slate-400 font-semibold">Blocks:</span>
+                  <span className="text-[10px] text-slate-400 font-semibold">{getBlocksLabel()}</span>
                   {blocks.map((s, idx) => (
                     <button
                       key={idx}
@@ -143,9 +164,11 @@ export const VocabExplorerModal: React.FC<VocabExplorerModalProps> = ({
                   ))}
                 </div>
 
-                <p className="text-[11px] text-slate-500 dark:text-slate-400 italic">
-                  {item.culturalNote}
-                </p>
+                {note && (
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400 italic">
+                    {note}
+                  </p>
+                )}
               </div>
             );
           })}
