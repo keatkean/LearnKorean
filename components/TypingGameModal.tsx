@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { VIRTUAL_KEYBOARD_LAYOUT, DUBEOLSIK_MAP, mapKeyToHangul } from '@/lib/dubeolsikMap';
-import { composeHangul, INITIAL_CONSONANTS, MEDIAL_VOWELS, FINAL_CONSONANTS } from '@/lib/hangulComposer';
+import { composeJamoSequence, INITIAL_CONSONANTS, MEDIAL_VOWELS, FINAL_CONSONANTS } from '@/lib/hangulComposer';
 import { Keyboard, Trophy, RotateCcw, X, Flame, Delete } from 'lucide-react';
 import { Translations } from '@/lib/i18n';
 
@@ -14,21 +14,6 @@ interface TypingGameModalProps {
 }
 
 const SAMPLE_WORDS = ['가', '나', '다', '라', '마', '바', '사', '아', '자', '차', '카', '타', '파', '하', '고', '노', '도', '로', '모', '보', '소', '오', '조', '초'];
-
-function composeJamoArray(jamos: string[]): string {
-  if (jamos.length === 0) return '';
-  if (jamos.length === 1) return jamos[0];
-
-  const firstIsConsonant = INITIAL_CONSONANTS.includes(jamos[0] as any);
-  const secondIsVowel = MEDIAL_VOWELS.includes(jamos[1] as any);
-
-  if (firstIsConsonant && secondIsVowel) {
-    const thirdIsFinal = jamos.length >= 3 && FINAL_CONSONANTS.includes(jamos[2] as any);
-    return composeHangul(jamos[0], jamos[1], thirdIsFinal ? jamos[2] : '');
-  }
-
-  return jamos.join('');
-}
 
 export const TypingGameModal: React.FC<TypingGameModalProps> = ({
   isOpen,
@@ -59,7 +44,7 @@ export const TypingGameModal: React.FC<TypingGameModalProps> = ({
 
   if (!isOpen) return null;
 
-  const currentComposedText = composeJamoArray(jamoBuffer);
+  const currentComposedText = composeJamoSequence(jamoBuffer);
 
   const handleMatchSuccess = (matchedText: string) => {
     onSpeak(matchedText);
@@ -79,7 +64,7 @@ export const TypingGameModal: React.FC<TypingGameModalProps> = ({
   const handleVirtualKeyPress = (hangulJamo: string) => {
     onSpeak(hangulJamo);
     const updatedBuffer = [...jamoBuffer, hangulJamo];
-    const composed = composeJamoArray(updatedBuffer);
+    const composed = composeJamoSequence(updatedBuffer);
 
     if (composed === targetWord) {
       handleMatchSuccess(targetWord);
