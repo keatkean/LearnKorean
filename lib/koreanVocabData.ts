@@ -1,6 +1,6 @@
 /**
  * Iconic Korean Vocabulary Dataset & Dynamic Syllable Extractor
- * Supports curated K-Culture, K-Pop, K-Drama, and user-added custom vocabulary.
+ * Contains curated K-Culture, K-Pop, K-Drama, and Daily Essential phrases.
  */
 
 export interface VocabItem {
@@ -11,7 +11,7 @@ export interface VocabItem {
     en: string;
     zh: string;
   };
-  category: 'kculture' | 'kdrama' | 'kpop' | 'essential' | 'custom';
+  category: 'kculture' | 'kdrama' | 'kpop' | 'essential';
   culturalNote: string;
 }
 
@@ -149,31 +149,5 @@ export const CURATED_VOCABULARY: VocabItem[] = [
     culturalNote: 'Found in many K-Pop song titles and emotional drama monologues.'
   }
 ];
-
-const CUSTOM_VOCAB_KEY = 'learn_korean_custom_vocab_v1';
-
-export function getStoredCustomVocab(): VocabItem[] {
-  if (typeof window === 'undefined') return [];
-  try {
-    const raw = localStorage.getItem(CUSTOM_VOCAB_KEY);
-    return raw ? JSON.parse(raw) : [];
-  } catch (e) {
-    console.error('Failed to load custom vocab', e);
-    return [];
-  }
-}
-
-export function saveCustomVocabItem(item: VocabItem): VocabItem[] {
-  const existing = getStoredCustomVocab();
-  const updated = [item, ...existing];
-  if (typeof window !== 'undefined') {
-    try {
-      localStorage.setItem(CUSTOM_VOCAB_KEY, JSON.stringify(updated));
-    } catch (e) {
-      console.error('Failed to save custom vocab', e);
-    }
-  }
-  return updated;
-}
 
 export const KOREAN_VOCABULARY = CURATED_VOCABULARY;

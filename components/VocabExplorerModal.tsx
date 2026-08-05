@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
-import { CURATED_VOCABULARY, VocabItem, getSyllableBlocks, getStoredCustomVocab, saveCustomVocabItem } from '@/lib/koreanVocabData';
-import { Sparkles, Volume2, Search, X, Plus, BookOpen, Check } from 'lucide-react';
+import React, { useState } from 'react';
+import { CURATED_VOCABULARY, VocabItem, getSyllableBlocks } from '@/lib/koreanVocabData';
+import { Sparkles, Volume2, Search, X } from 'lucide-react';
 import { Translations, Locale } from '@/lib/i18n';
 
 interface VocabExplorerModalProps {
@@ -22,54 +22,10 @@ export const VocabExplorerModal: React.FC<VocabExplorerModalProps> = ({
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const [vocabList, setVocabList] = useState<VocabItem[]>(CURATED_VOCABULARY);
-  const [isAddingNew, setIsAddingNew] = useState(false);
-
-  // New Word Form State
-  const [newKorean, setNewKorean] = useState('');
-  const [newRom, setNewRom] = useState('');
-  const [newTransEn, setNewTransEn] = useState('');
-  const [newTransZh, setNewTransZh] = useState('');
-  const [newNote, setNewNote] = useState('');
-
-  useEffect(() => {
-    if (isOpen) {
-      const customItems = getStoredCustomVocab();
-      setVocabList([...customItems, ...CURATED_VOCABULARY]);
-    }
-  }, [isOpen]);
 
   if (!isOpen) return null;
 
-  const handleAddCustomWord = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newKorean.trim()) return;
-
-    const newItem: VocabItem = {
-      id: `custom_${Date.now()}`,
-      korean: newKorean.trim(),
-      romanization: newRom.trim() || newKorean.trim(),
-      translation: {
-        en: newTransEn.trim() || newKorean.trim(),
-        zh: newTransZh.trim() || newTransEn.trim() || newKorean.trim(),
-      },
-      category: 'custom',
-      culturalNote: newNote.trim() || 'User added custom vocabulary word.',
-    };
-
-    const updated = saveCustomVocabItem(newItem);
-    setVocabList([...updated, ...CURATED_VOCABULARY]);
-
-    // Reset Form
-    setNewKorean('');
-    setNewRom('');
-    setNewTransEn('');
-    setNewTransZh('');
-    setNewNote('');
-    setIsAddingNew(false);
-  };
-
-  const filteredVocab = vocabList.filter((v) => {
+  const filteredVocab = CURATED_VOCABULARY.filter((v) => {
     const matchesCategory = selectedCategory === 'all' || v.category === selectedCategory;
     const matchesSearch =
       v.korean.includes(searchTerm) ||
@@ -91,10 +47,10 @@ export const VocabExplorerModal: React.FC<VocabExplorerModalProps> = ({
             </div>
             <div>
               <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100">
-                Dynamic K-Culture Vocabulary Explorer
+                K-Pop & K-Drama Vocabulary Explorer
               </h2>
               <p className="text-xs text-slate-500 dark:text-slate-400">
-                Explore curated K-Pop/K-Drama words & add your own custom phrases
+                Explore curated K-Pop & K-Drama words with dynamic syllable block breakdowns
               </p>
             </div>
           </div>
@@ -107,7 +63,7 @@ export const VocabExplorerModal: React.FC<VocabExplorerModalProps> = ({
           </button>
         </div>
 
-        {/* Search, Filter & Add Word Toolbar */}
+        {/* Search & Category Filter Toolbar */}
         <div className="flex flex-col sm:flex-row gap-3 items-center justify-between">
           
           {/* Search Bar */}
@@ -124,7 +80,7 @@ export const VocabExplorerModal: React.FC<VocabExplorerModalProps> = ({
 
           {/* Category Filters */}
           <div className="flex items-center gap-1.5 overflow-x-auto w-full sm:w-auto">
-            {['all', 'kculture', 'kdrama', 'kpop', 'essential', 'custom'].map((cat) => (
+            {['all', 'kculture', 'kdrama', 'kpop', 'essential'].map((cat) => (
               <button
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
@@ -137,87 +93,9 @@ export const VocabExplorerModal: React.FC<VocabExplorerModalProps> = ({
                 {cat}
               </button>
             ))}
-
-            <button
-              onClick={() => setIsAddingNew(!isAddingNew)}
-              className="flex items-center gap-1 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl transition-all shadow-sm whitespace-nowrap"
-            >
-              <Plus className="w-3.5 h-3.5" />
-              <span>Add Word</span>
-            </button>
           </div>
 
         </div>
-
-        {/* Custom Word Form Modal Collapse */}
-        {isAddingNew && (
-          <form
-            onSubmit={handleAddCustomWord}
-            className="bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900/60 rounded-2xl p-4 flex flex-col gap-3 animate-fade-in"
-          >
-            <div className="text-xs font-bold text-emerald-800 dark:text-emerald-300 flex items-center gap-1.5">
-              <BookOpen className="w-4 h-4" />
-              <span>Add New Custom Korean Vocabulary Word</span>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <input
-                type="text"
-                required
-                value={newKorean}
-                onChange={(e) => setNewKorean(e.target.value)}
-                placeholder="Korean Word (e.g. 우영우)"
-                className="text-xs bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-              />
-              <input
-                type="text"
-                value={newRom}
-                onChange={(e) => setNewRom(e.target.value)}
-                placeholder="Romanization (e.g. Woo Young-woo)"
-                className="text-xs bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-              />
-              <input
-                type="text"
-                value={newTransEn}
-                onChange={(e) => setNewTransEn(e.target.value)}
-                placeholder="English Translation"
-                className="text-xs bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-              />
-              <input
-                type="text"
-                value={newTransZh}
-                onChange={(e) => setNewTransZh(e.target.value)}
-                placeholder="Chinese Translation (中文翻译)"
-                className="text-xs bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-              />
-            </div>
-
-            <input
-              type="text"
-              value={newNote}
-              onChange={(e) => setNewNote(e.target.value)}
-              placeholder="Cultural Note / Drama Context"
-              className="text-xs bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-            />
-
-            <div className="flex justify-end gap-2 mt-1">
-              <button
-                type="button"
-                onClick={() => setIsAddingNew(false)}
-                className="text-xs text-slate-500 hover:text-slate-700 px-3 py-1.5"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                className="flex items-center gap-1 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-1.5 rounded-xl shadow-sm"
-              >
-                <Check className="w-3.5 h-3.5" />
-                <span>Save Word</span>
-              </button>
-            </div>
-          </form>
-        )}
 
         {/* Vocabulary Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -226,14 +104,8 @@ export const VocabExplorerModal: React.FC<VocabExplorerModalProps> = ({
             return (
               <div
                 key={item.id}
-                className="bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/80 rounded-2xl p-4 flex flex-col justify-between gap-3 hover:border-indigo-400 dark:hover:border-indigo-600 transition-all shadow-sm relative"
+                className="bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/80 rounded-2xl p-4 flex flex-col justify-between gap-3 hover:border-indigo-400 dark:hover:border-indigo-600 transition-all shadow-sm"
               >
-                {item.category === 'custom' && (
-                  <span className="absolute top-3 right-12 text-[10px] font-bold bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 px-2 py-0.5 rounded-md">
-                    Custom
-                  </span>
-                )}
-
                 <div className="flex items-start justify-between">
                   <div>
                     <div className="text-2xl font-black text-slate-800 dark:text-slate-100 tracking-wide">
@@ -259,7 +131,7 @@ export const VocabExplorerModal: React.FC<VocabExplorerModalProps> = ({
 
                 {/* Dynamic Syllable Block Extraction */}
                 <div className="flex items-center gap-1.5 pt-1 border-t border-slate-200/60 dark:border-slate-700/60">
-                  <span className="text-[10px] text-slate-400 font-semibold">Dynamic Blocks:</span>
+                  <span className="text-[10px] text-slate-400 font-semibold">Blocks:</span>
                   {blocks.map((s, idx) => (
                     <button
                       key={idx}
