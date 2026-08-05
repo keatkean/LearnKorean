@@ -24,6 +24,7 @@ export function useSpeech(): UseSpeechReturn {
   const [isSupported, setIsSupported] = useState<boolean>(true);
 
   const onEndCallbackRef = useRef<(() => void) | null>(null);
+  const activeUtteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
 
   useEffect(() => {
     if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
@@ -32,14 +33,17 @@ export function useSpeech(): UseSpeechReturn {
     }
 
     const updateVoices = () => {
-      const availableVoices = window.speechSynthesis.getVoices();
-      const koreanVoices = availableVoices.filter((v) => v.lang.startsWith('ko'));
-      setVoices(koreanVoices.length > 0 ? koreanVoices : availableVoices);
+      try {
+        const availableVoices = window.speechSynthesis.getVoices();
+        const koreanVoices = availableVoices.filter((v) => v.lang.startsWith('ko'));
+        setVoices(koreanVoices.length > 0 ? koreanVoices : availableVoices);
 
-      // Auto-select Korean voice if available
-      if (koreanVoices.length > 0 && !selectedVoice) {
-        const preferred = koreanVoices.find((v) => v.localService) || koreanVoices[0];
-        setSelectedVoice(preferred);
+        if (koreanVoices.length > 0 && !selectedVoice) {
+          const preferred = koreanVoices.find((v) => v.localService) || koreanVoices[0];
+          setSelectedVoice(preferred);
+        }
+      } catch (e) {
+        console.warn('Error loading speech voices:', e);
       }
     };
 
@@ -58,6 +62,7 @@ export function useSpeech(): UseSpeechReturn {
   const stop = useCallback(() => {
     if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
       window.speechSynthesis.cancel();
+      activeUtteranceRef.current = null;
       setIsPlaying(false);
       setActiveText(null);
     }
@@ -79,6 +84,8 @@ export function useSpeech(): UseSpeechReturn {
         utterance.voice = selectedVoice;
       }
 
+      // Retain utterance in ref to prevent V8/JS engine garbage collection mid-speech
+      activeUtteranceRef.current = utterance;
       onEndCallbackRef.current = onEnd || null;
 
       utterance.onstart = () => {
@@ -89,6 +96,7 @@ export function useSpeech(): UseSpeechReturn {
       utterance.onend = () => {
         setIsPlaying(false);
         setActiveText(null);
+        activeUtteranceRef.current = null;
         if (onEndCallbackRef.current) {
           onEndCallbackRef.current();
           onEndCallbackRef.current = null;
@@ -99,6 +107,7 @@ export function useSpeech(): UseSpeechReturn {
         console.warn('SpeechSynthesis error:', e);
         setIsPlaying(false);
         setActiveText(null);
+        activeUtteranceRef.current = null;
         if (onEndCallbackRef.current) {
           onEndCallbackRef.current();
           onEndCallbackRef.current = null;

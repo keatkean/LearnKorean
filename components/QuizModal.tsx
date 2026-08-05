@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Syllable, getAllSyllableList } from '@/lib/hangulData';
 import { Translations } from '@/lib/i18n';
 import { X, Volume2, Trophy, CheckCircle2, XCircle, Sparkles } from 'lucide-react';
@@ -26,15 +26,21 @@ export const QuizModal: React.FC<QuizModalProps> = ({
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
 
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const audioTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const clearPendingTimeouts = () => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    if (audioTimeoutRef.current) clearTimeout(audioTimeoutRef.current);
+  };
+
   const generateQuestion = () => {
     setSelectedAnswer(null);
     setIsCorrect(null);
 
-    // Pick random target
     const randomTarget = allSyllables[Math.floor(Math.random() * allSyllables.length)];
     setTarget(randomTarget);
 
-    // Pick 3 random incorrect choices
     const wrongChoices: Syllable[] = [];
     while (wrongChoices.length < 3) {
       const choice = allSyllables[Math.floor(Math.random() * allSyllables.length)];
@@ -43,12 +49,10 @@ export const QuizModal: React.FC<QuizModalProps> = ({
       }
     }
 
-    // Combine & Shuffle 4 options
     const combined = [randomTarget, ...wrongChoices].sort(() => Math.random() - 0.5);
     setOptions(combined);
 
-    // Play target audio
-    setTimeout(() => {
+    audioTimeoutRef.current = setTimeout(() => {
       onSpeak(randomTarget.char);
     }, 150);
   };
@@ -58,13 +62,24 @@ export const QuizModal: React.FC<QuizModalProps> = ({
       setScore(0);
       setStreak(0);
       generateQuestion();
+    } else {
+      clearPendingTimeouts();
     }
+
+    return () => {
+      clearPendingTimeouts();
+    };
   }, [isOpen]);
 
   if (!isOpen || !target) return null;
 
+  const handleCloseModal = () => {
+    clearPendingTimeouts();
+    onClose();
+  };
+
   const handleOptionClick = (option: Syllable) => {
-    if (selectedAnswer !== null) return; // Prevent multi-click
+    if (selectedAnswer !== null) return;
 
     setSelectedAnswer(option.char);
     const correct = option.char === target.char;
@@ -77,8 +92,7 @@ export const QuizModal: React.FC<QuizModalProps> = ({
       setStreak(0);
     }
 
-    // Auto next after 1.2s
-    setTimeout(() => {
+    timeoutRef.current = setTimeout(() => {
       generateQuestion();
     }, 1200);
   };
@@ -86,6 +100,7 @@ export const QuizModal: React.FC<QuizModalProps> = ({
   return (
     <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
       <div className="bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-800 rounded-3xl p-6 max-w-md w-full shadow-2xl relative flex flex-col items-center">
+        
         {/* Header */}
         <div className="w-full flex items-center justify-between border-b border-slate-100 dark:border-gray-800 pb-3">
           <div className="flex items-center gap-2">
@@ -94,7 +109,7 @@ export const QuizModal: React.FC<QuizModalProps> = ({
             </h2>
           </div>
           <button
-            onClick={onClose}
+            onClick={handleCloseModal}
             className="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-gray-200 rounded-full hover:bg-slate-100 dark:hover:bg-gray-800 transition-colors"
           >
             <X className="w-5 h-5" />
@@ -127,7 +142,7 @@ export const QuizModal: React.FC<QuizModalProps> = ({
           </p>
         </div>
 
-        {/* Answer Options Grid (2x2) */}
+        {/* Answer Options Grid */}
         <div className="grid grid-cols-2 gap-3 w-full my-2">
           {options.map((opt) => {
             const isSelected = selectedAnswer === opt.char;

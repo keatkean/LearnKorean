@@ -2,8 +2,9 @@
 
 import React, { useState } from 'react';
 import { Syllable, getAllSyllableList } from '@/lib/hangulData';
+import { saveSRSState, ReviewQuality } from '@/lib/srsStorage';
 import { Translations } from '@/lib/i18n';
-import { X, Volume2, ChevronLeft, ChevronRight, Shuffle, RotateCw } from 'lucide-react';
+import { X, Volume2, ChevronLeft, ChevronRight, Shuffle, RotateCw, Brain } from 'lucide-react';
 
 interface FlashcardModalProps {
   isOpen: boolean;
@@ -43,6 +44,11 @@ export const FlashcardModal: React.FC<FlashcardModalProps> = ({
     setCurrentIndex(0);
   };
 
+  const handleSRSRating = (quality: ReviewQuality) => {
+    saveSRSState(currentItem.char, quality);
+    handleNext();
+  };
+
   const handlePlaySound = (e: React.MouseEvent) => {
     e.stopPropagation();
     onSpeak(currentItem.char);
@@ -51,9 +57,11 @@ export const FlashcardModal: React.FC<FlashcardModalProps> = ({
   return (
     <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
       <div className="bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-800 rounded-3xl p-6 max-w-md w-full shadow-2xl relative flex flex-col items-center">
+        
         {/* Header */}
         <div className="w-full flex items-center justify-between mb-4 border-b border-slate-100 dark:border-gray-800 pb-3">
           <h2 className="text-lg font-bold text-slate-800 dark:text-gray-100 flex items-center gap-2">
+            <Brain className="w-5 h-5 text-indigo-500" />
             <span>{t.fcTitle}</span>
             <span className="text-xs bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 font-semibold px-2 py-0.5 rounded-full">
               {currentIndex + 1} / {syllables.length}
@@ -114,6 +122,36 @@ export const FlashcardModal: React.FC<FlashcardModalProps> = ({
             </div>
           </div>
         </div>
+
+        {/* SRS Rating Actions (Visible when card is flipped) */}
+        {isFlipped && (
+          <div className="w-full flex items-center justify-between gap-1.5 my-2 animate-fade-in">
+            <button
+              onClick={() => handleSRSRating(0)}
+              className="flex-1 bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-900 py-2 rounded-xl text-xs font-bold hover:bg-rose-100 transition-colors"
+            >
+              Again (1d)
+            </button>
+            <button
+              onClick={() => handleSRSRating(1)}
+              className="flex-1 bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 border border-amber-200 dark:border-amber-900 py-2 rounded-xl text-xs font-bold hover:bg-amber-100 transition-colors"
+            >
+              Hard (2d)
+            </button>
+            <button
+              onClick={() => handleSRSRating(3)}
+              className="flex-1 bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-900 py-2 rounded-xl text-xs font-bold hover:bg-blue-100 transition-colors"
+            >
+              Good (4d)
+            </button>
+            <button
+              onClick={() => handleSRSRating(5)}
+              className="flex-1 bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-900 py-2 rounded-xl text-xs font-bold hover:bg-emerald-100 transition-colors"
+            >
+              Easy (7d)
+            </button>
+          </div>
+        )}
 
         {/* Controls */}
         <div className="w-full flex items-center justify-between mt-2">
