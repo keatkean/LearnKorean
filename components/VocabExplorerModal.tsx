@@ -47,10 +47,10 @@ export const VocabExplorerModal: React.FC<VocabExplorerModalProps> = ({
             </div>
             <div>
               <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100">
-                K-Pop & K-Drama Vocabulary Explorer
+                {t.vocabTitle}
               </h2>
               <p className="text-xs text-slate-500 dark:text-slate-400">
-                Explore curated K-Pop & K-Drama words with dynamic syllable block breakdowns
+                {t.vocabSubtitle}
               </p>
             </div>
           </div>
@@ -73,7 +73,7 @@ export const VocabExplorerModal: React.FC<VocabExplorerModalProps> = ({
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Search vocabulary..."
+              placeholder={t.vocabSearchPlaceholder}
               className="w-full text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl pl-9 pr-4 py-2.5 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
           </div>

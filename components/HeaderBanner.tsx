@@ -98,7 +98,7 @@ export const HeaderBanner: React.FC<HeaderBannerProps> = ({
             className="flex items-center gap-1.5 px-3 py-1.5 bg-white/20 hover:bg-white/30 text-white rounded-xl text-xs font-semibold transition-all border border-white/20 shadow-sm"
           >
             <Sparkles className="w-3.5 h-3.5" />
-            <span>Builder</span>
+            <span>{t.btnSyllableBuilder}</span>
           </button>
 
           <button
@@ -106,7 +106,7 @@ export const HeaderBanner: React.FC<HeaderBannerProps> = ({
             className="flex items-center gap-1.5 px-3 py-1.5 bg-white/20 hover:bg-white/30 text-white rounded-xl text-xs font-semibold transition-all border border-white/20 shadow-sm"
           >
             <Edit3 className="w-3.5 h-3.5" />
-            <span>Write</span>
+            <span>{t.btnStrokeOrder}</span>
           </button>
 
           <button
@@ -114,7 +114,7 @@ export const HeaderBanner: React.FC<HeaderBannerProps> = ({
             className="flex items-center gap-1.5 px-3 py-1.5 bg-white/20 hover:bg-white/30 text-white rounded-xl text-xs font-semibold transition-all border border-white/20 shadow-sm"
           >
             <Activity className="w-3.5 h-3.5" />
-            <span>Vocal Tract</span>
+            <span>{t.btnVocalTract}</span>
           </button>
 
           <button
@@ -122,7 +122,7 @@ export const HeaderBanner: React.FC<HeaderBannerProps> = ({
             className="flex items-center gap-1.5 px-3 py-1.5 bg-amber-400 hover:bg-amber-300 text-amber-950 rounded-xl text-xs font-bold transition-all shadow-sm"
           >
             <Keyboard className="w-3.5 h-3.5" />
-            <span>Typing Game</span>
+            <span>{t.btnTypingGame}</span>
           </button>
 
           <button
@@ -130,7 +130,7 @@ export const HeaderBanner: React.FC<HeaderBannerProps> = ({
             className="flex items-center gap-1.5 px-3 py-1.5 bg-rose-500 hover:bg-rose-400 text-white rounded-xl text-xs font-bold transition-all shadow-sm"
           >
             <Mic className="w-3.5 h-3.5" />
-            <span>Mic Score</span>
+            <span>{t.btnPronunciation}</span>
           </button>
 
           <button
@@ -138,7 +138,7 @@ export const HeaderBanner: React.FC<HeaderBannerProps> = ({
             className="flex items-center gap-1.5 px-3 py-1.5 bg-white/20 hover:bg-white/30 text-white rounded-xl text-xs font-semibold transition-all border border-white/20 shadow-sm"
           >
             <BookOpen className="w-3.5 h-3.5" />
-            <span>K-Vocab</span>
+            <span>{t.btnVocabExplorer}</span>
           </button>
 
           <button
@@ -146,7 +146,7 @@ export const HeaderBanner: React.FC<HeaderBannerProps> = ({
             className="flex items-center gap-1.5 px-3 py-1.5 bg-indigo-900/60 hover:bg-indigo-900 text-white rounded-xl text-xs font-semibold transition-all border border-white/20 shadow-sm"
           >
             <Headphones className="w-3.5 h-3.5" />
-            <span>Audio Mode</span>
+            <span>{t.btnCommuterMode}</span>
           </button>
 
           <button
@@ -154,7 +154,7 @@ export const HeaderBanner: React.FC<HeaderBannerProps> = ({
             className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-500/90 hover:bg-emerald-400 text-white rounded-xl text-xs font-bold transition-all shadow-sm"
           >
             <GraduationCap className="w-3.5 h-3.5" />
-            <span>SRS Cards</span>
+            <span>{t.flashcardBtn}</span>
           </button>
 
           <button
@@ -162,7 +162,7 @@ export const HeaderBanner: React.FC<HeaderBannerProps> = ({
             className="flex items-center gap-1.5 px-3 py-1.5 bg-purple-500 hover:bg-purple-400 text-white rounded-xl text-xs font-bold transition-all shadow-sm"
           >
             <Gamepad2 className="w-3.5 h-3.5" />
-            <span>Quiz</span>
+            <span>{t.quizBtn}</span>
           </button>
 
           <button
@@ -170,7 +170,7 @@ export const HeaderBanner: React.FC<HeaderBannerProps> = ({
             className="flex items-center gap-1.5 px-3 py-1.5 bg-white/20 hover:bg-white/30 text-white rounded-xl text-xs font-semibold transition-all border border-white/20 shadow-sm"
           >
             <BookOpen className="w-3.5 h-3.5" />
-            <span>Guide</span>
+            <span>{t.guideBtn}</span>
           </button>
         </div>
 

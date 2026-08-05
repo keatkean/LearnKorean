@@ -48,10 +48,10 @@ export const PronunciationEvaluatorModal: React.FC<PronunciationEvaluatorModalPr
             </div>
             <div>
               <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100">
-                AI Pronunciation Evaluator
+                {t.evalTitle}
               </h2>
               <p className="text-xs text-slate-500 dark:text-slate-400">
-                Speak into your mic & get real-time Korean speech score
+                {t.evalSubtitle}
               </p>
             </div>
           </div>

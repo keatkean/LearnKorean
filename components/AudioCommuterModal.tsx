@@ -79,10 +79,10 @@ export const AudioCommuterModal: React.FC<AudioCommuterModalProps> = ({
             </div>
             <div>
               <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100">
-                Hands-Free Audio Commuter Mode
+                {t.commuterTitle}
               </h2>
               <p className="text-xs text-slate-500 dark:text-slate-400">
-                Auto-advancing listening drills & Audio Blind Test
+                {t.commuterSubtitle}
               </p>
             </div>
           </div>

@@ -93,10 +93,10 @@ export const StrokeOrderCanvasModal: React.FC<StrokeOrderCanvasModalProps> = ({
             </div>
             <div>
               <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100">
-                Dynamic Stroke-Order & Writing Canvas
+                {t.strokeTitle}
               </h2>
               <p className="text-xs text-slate-500 dark:text-slate-400">
-                Trace any consonant, vowel, or composed Hangul syllable
+                {t.strokeSubtitle}
               </p>
             </div>
           </div>
@@ -118,7 +118,7 @@ export const StrokeOrderCanvasModal: React.FC<StrokeOrderCanvasModalProps> = ({
               maxLength={2}
               value={customInput}
               onChange={(e) => setCustomInput(e.target.value)}
-              placeholder="Type any character..."
+              placeholder={t.strokePlaceholder}
               className="w-full text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl pl-9 pr-3 py-2 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
           </div>

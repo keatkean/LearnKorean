@@ -130,10 +130,10 @@ export const TypingGameModal: React.FC<TypingGameModalProps> = ({
             </div>
             <div>
               <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100">
-                Hangul Speed Typist Game
+                {t.typingTitle}
               </h2>
               <p className="text-xs text-slate-500 dark:text-slate-400">
-                Practice typing with 2-Set Dubeolsik keyboard layout
+                {t.typingSubtitle}
               </p>
             </div>
           </div>
@@ -150,25 +150,25 @@ export const TypingGameModal: React.FC<TypingGameModalProps> = ({
         <div className="flex items-center justify-between bg-slate-50 dark:bg-slate-800 px-4 py-3 rounded-xl">
           <div className="flex items-center gap-2 text-xs font-bold text-amber-600 dark:text-amber-400">
             <Flame className="w-4 h-4" />
-            <span>Score: {score} pts</span>
+            <span>{t.typingScore}: {score}</span>
           </div>
           <div className="flex items-center gap-2 text-xs font-bold text-indigo-600 dark:text-indigo-400">
             <Trophy className="w-4 h-4" />
-            <span>High Score: {highScore} pts</span>
+            <span>{t.typingHighScore}: {highScore}</span>
           </div>
           <button
             onClick={handleResetGame}
             className="text-xs text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 flex items-center gap-1"
           >
             <RotateCcw className="w-3.5 h-3.5" />
-            <span>Reset</span>
+            <span>{t.typingReset}</span>
           </button>
         </div>
 
         {/* Game Target Box */}
         <div className="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-slate-800 dark:to-indigo-950/40 border border-indigo-100 dark:border-indigo-900 rounded-2xl p-6 flex flex-col items-center justify-center gap-4">
           <div className="text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest">
-            Type This Character:
+            {t.typingTargetLabel}
           </div>
           <div className="text-6xl font-black text-slate-800 dark:text-slate-100 tracking-wider">
             {targetWord}
@@ -181,7 +181,7 @@ export const TypingGameModal: React.FC<TypingGameModalProps> = ({
               readOnly
               value={currentComposedText}
               onKeyDown={handleKeyDown}
-              placeholder="Tap virtual keys below..."
+              placeholder={t.typingInputPlaceholder}
               className="w-56 text-center text-2xl font-bold bg-white dark:bg-slate-900 border-2 border-indigo-300 dark:border-indigo-700 rounded-xl px-4 py-2 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-inner"
             />
             {jamoBuffer.length > 0 && (

@@ -82,10 +82,10 @@ export const VocalTractGuideModal: React.FC<VocalTractGuideModalProps> = ({
             </div>
             <div>
               <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100">
-                Interactive Vocal Tract & Mouth Guide
+                {t.vocalTitle}
               </h2>
               <p className="text-xs text-slate-500 dark:text-slate-400">
-                Anatomical tongue placement & mouth shape diagrams
+                {t.vocalSubtitle}
               </p>
             </div>
           </div>

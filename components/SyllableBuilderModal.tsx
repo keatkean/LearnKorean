@@ -44,10 +44,10 @@ export const SyllableBuilderModal: React.FC<SyllableBuilderModalProps> = ({
             </div>
             <div>
               <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100">
-                Syllable Builder Sandbox
+                {t.builderTitle}
               </h2>
               <p className="text-xs text-slate-500 dark:text-slate-400">
-                Combine Initial (초성), Medial (중성), & Final (종성) into Hangul blocks
+                {t.builderSubtitle}
               </p>
             </div>
           </div>
