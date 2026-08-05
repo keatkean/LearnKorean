@@ -6,29 +6,26 @@
 
 ## 🇺🇸 English
 
-A modern, responsive, high-performance web application for learning Korean Hangul pronunciation (19 Consonants × 21 Vowels = 399 Syllable blocks). Built with Next.js 15, TypeScript, Tailwind CSS, and Web Speech Synthesis API.
+A modern, responsive, high-performance web application for learning Korean Hangul pronunciation (19 Consonants × 21 Vowels = 399 Syllable blocks). Built with Next.js 15, TypeScript, Tailwind CSS, and Web Speech APIs, fully optimized for **Android Chrome** & **iOS Safari**.
 
 ### ✨ Features
-- 🔊 **Standard Web Speech Synthesis**: Instant audio playback on cell click with speed rate controls (`0.5x`, `0.75x`, `0.85x`, `1.0x`) and voice picker.
-- 📐 **Pre-computed 399 Syllable Unicode Matrix**: 0xAC00 Hangul block calculation algorithm.
-- 🗺️ **4 Matrix Views**:
-  - Basic Sounds (14 Consonants × 10 Vowels = 140 Syllables)
-  - Tense Consonants (5 Double Consonants × 10 Vowels = 50 Syllables)
-  - Complex Vowels (14 Consonants × 11 Vowels = 154 Syllables)
-  - Full Chart (19 Consonants × 21 Vowels = 399 Syllables)
-- 🔍 **Real-time Search**: Live search and highlight matching Hangul characters and Revised Romanization (e.g., `ka`, `g`, `가`).
-- 🎓 **3D Audio Flashcards**: Interactive flip card mode with sound playback and shuffle functionality.
-- 🎯 **Listening Quiz**: Gamified sound quiz with scoring, streak counters, and immediate feedback.
-- 👩‍🏫 **Linguistics & Pronunciation Guide**: Detailed phonetics breakdown (Plain vs Tense vs Aspirated consonants, Vowels comparison, 7 Batchims).
-- 🌙 **Dark & Light Mode**: Seamless theme switching with custom CSS variables.
-- 📱 **Mobile Responsive**: Sticky row (vowels) & column (consonants) headers for smooth dual-axis matrix scrolling.
+- 🧩 **Syllable Builder Sandbox**: Assemble Initial + Medial + Final (Batchim) blocks into composed Unicode Hangul with live audio playback.
+- ✍️ **Interactive Vector Stroke Canvas**: Trace consonants & vowels with standard stroke-order direction vectors and real-time canvas clearing/guide controls.
+- 🗣️ **Anatomical Vocal Tract Guide**: Visualizing tongue positions, airflow paths, & mouth gestures for velar, alveolar, bilabial, and sibilant sounds.
+- ⌨️ **Hangul Speed Typist Game**: Practice typing with 2-Set Dubeolsik keyboard layout, automated composition engine, scoring, & high score tracking.
+- 🎙️ **AI Pronunciation Evaluator**: Real-time Web Speech recognition evaluation and confidence scoring.
+- 💖 **K-Pop & K-Drama Vocabulary Explorer**: Curated romantic sentences and high-frequency K-Culture expressions with dynamic syllable block breakdowns.
+- 🎧 **Hands-Free Audio Commuter Mode**: Auto-advancing audio listening drills with 30+ items, speed control, Shuffle 🔀 queue, and Audio Blind Test mode.
+- 🎓 **SuperMemo SM-2 SRS Flashcards**: Adaptive spaced repetition scheduling (`Again`, `Hard`, `Good`, `Easy`) saved to `localStorage`.
+- 📲 **Progressive Web App (PWA)**: Full offline capability with Service Worker caching and iOS standalone app support.
+- 🧪 **Comprehensive Automated Test Suite**: 43 unit tests covering Hangul composition, Dubeolsik mapping, SM-2 SRS engine, and QA data integrity.
 
 ### 🛠️ Tech Stack
-- **Framework**: Next.js 15 (App Router)
+- **Framework**: Next.js 15 (App Router, Static Export)
 - **Language**: TypeScript
-- **Styling**: Tailwind CSS, CSS Modules
-- **Icons & Animation**: Lucide React, Framer Motion
-- **Fonts**: Noto Sans KR (Google Fonts), Inter
+- **Styling**: Tailwind CSS
+- **Icons**: Lucide React
+- **Testing**: Automated Node runner test suite (`npm test`)
 
 ### 🚀 Getting Started
 
@@ -37,34 +34,39 @@ A modern, responsive, high-performance web application for learning Korean Hangu
    npm install
    ```
 
-2. **Run Development Server**:
+2. **Run Automated Test Suite**:
+   ```bash
+   npm test
+   ```
+
+3. **Run Development Server**:
    ```bash
    npm run dev
    ```
    Open `http://localhost:3000` in your browser.
 
-3. **Production Build**:
+4. **Production Build & Static Export**:
    ```bash
    npm run build
-   npm run start
    ```
 
 ---
 
 ## 🇨🇳 简体中文
 
-基于 Next.js 15 App Router、TypeScript 与 Tailwind CSS 构建的现代响应式韩语四十音发音跟读表（涵盖 19 辅音 × 21 元音 = 399 音节组合）。
+基于 Next.js 15 App Router、TypeScript 与 Tailwind CSS 构建的现代响应式韩语四十音发音跟读与全套互动学习平台（涵盖 19 辅音 × 21 元音 = 399 音节组合）。完美支持 **Android (Chrome/Edge)** 与 **iOS (Safari)** 移动端体验。
 
 ### ✨ 核心功能
-- 🔊 **标准 Web Speech 朗读引擎**：点击单元格实时播放发音，支持调速（`0.5x 慢速` 至 `1.0x 快速`）与语音库选择。
-- 📐 **399 音节 Unicode 算法预计算**：基于 `0xAC00` 偏移公式精确定位每一个韩语音节。
-- 🗺️ **4 种结构视图**：基本音 (14×10)、紧辅音 (5×10)、复元音 (14×11) 与四十音总表 (19×21)。
-- 🔍 **实时搜索高亮**：输入韩语字母或罗马音（如 `ka`, `g`, `가`）动态高亮匹配单元格。
-- 🎓 **3D 立体卡片跟读**：翻面卡片展示声母、韵母、罗马音与语音朗读。
-- 🎯 **听音辨字小测验**：听力测试模式，支持积分计分与连胜奖励。
-- 👩‍🏫 **面向中文学习者的发音要领**：松音/紧音/送气音三分法对比、易混淆元音辨析与 7 代表收音解析。
-- 🌙 **深色/浅色主题**：支持一键切换 Night/Day Mode。
-- 📱 **移动端响应式体验**：表头元音行与首列辅音双向 Sticky 锁死，滑动不迷路。
+- 🧩 **拼音组合沙盒**：自由选择 初声(辅音) + 中声(元音) + 终声(收音) 实时合成 Unicode 拼音并听取发音。
+- ✍️ **笔顺描红与手写画布**：完整矢量笔顺路径与标准书写顺序指南，支持触屏描红与清除。
+- 🗣️ **声道剖面与口型图解**：直观展示软腭音、齿龈音、双唇音与齿音的舌位与气流方向。
+- ⌨️ **韩语键盘速打游戏**：内置 두벌식 (2-Set Dubeolsik) 虚拟键盘与实时间拼字引擎，支持得分与最高分记录。
+- 🎙️ **AI 麦克风发音评估**：基于 Web Speech API 实时识别韩语朗读，计算发音匹配度与评分。
+- 💖 **K-Pop & 影视词典**：精选韩剧浪漫金句与日常高频词汇，支持按字拆解与拼音音节学习。
+- 🎧 **随身听跟读模式 (Commuter Mode)**：自动循环播放 30+ 词汇，支持 🔀 随机打乱与盲听跟读测试。
+- 🎓 **SuperMemo SM-2 SRS 记忆卡片**：基于间隔重复算法，按 `重来`、`困难`、`良好`、`简单` 智能调度复习计划。
+- 📲 **PWA 离线支持**：支持添加到手机桌面与 Service Worker 离线资源缓存。
+- 🧪 **自动化测试套件**：43+ 单元测试覆盖拼音合成、键盘映射、SRS 调度算法与数据校验。
 
 ### 🚀 快速开始
 
@@ -72,11 +74,15 @@ A modern, responsive, high-performance web application for learning Korean Hangu
    ```bash
    npm install
    ```
-2. **启动开发服务器**：
+2. **运行单元测试**：
+   ```bash
+   npm test
+   ```
+3. **启动开发服务器**：
    ```bash
    npm run dev
    ```
-3. **打包构建**：
+4. **打包构建**：
    ```bash
    npm run build
    ```
@@ -85,18 +91,19 @@ A modern, responsive, high-performance web application for learning Korean Hangu
 
 ## 🇹🇼 繁體中文
 
-基於 Next.js 15 App Router、TypeScript 與 Tailwind CSS 建構的現代響應式韓語四十音發音跟讀表（涵蓋 19 輔音 × 21 母音 = 399 音節組合）。
+基於 Next.js 15 App Router、TypeScript 與 Tailwind CSS 建構的現代響應式韓語四十音發音跟讀與全套互動學習平台（涵蓋 19 輔音 × 21 母音 = 399 音節組合）。完美支援 **Android (Chrome/Edge)** 與 **iOS (Safari)** 行動端體驗。
 
 ### ✨ 核心功能
-- 🔊 **標準 Web Speech 朗讀引擎**：點擊單元格即時播放發音，支援調速（`0.5x 慢速` 至 `1.0x 快速`）與語音庫選擇。
-- 📐 **399 音節 Unicode 演算法預計算**：基於 `0xAC00` 偏移公式精確定位每一個韓語音節。
-- 🗺️ **4 種結構檢視**：基本音 (14×10)、緊輔音 (5×10)、複母音 (14×11) 與四十音總表 (19×21)。
-- 🔍 **即時搜尋高亮**：輸入韓語字母或羅馬拼音（如 `ka`, `g`, `가`）動態高亮符合單元格。
-- 🎓 **3D 立體卡片跟讀**：翻面卡片展示聲母、韻母、羅馬拼音與語音朗讀。
-- 🎯 **聽音辨字小測驗**：聽力測試模式，支援積分計分與連勝獎勵。
-- 👩‍🏫 **發音要領與語音解析**：鬆音/緊音/送氣音三分法對比、易混淆母音辨析與 7 代表收音解析。
-- 🌙 **深色/淺色主題**：支援一鍵切換 Night/Day Mode。
-- 📱 **行動端響應式體驗**：表頭母音列與首行輔音雙向 Sticky 鎖死。
+- 🧩 **拼音組合沙盒**：自由選擇 初聲(輔音) + 中聲(母音) + 終聲(收音) 實時合成 Unicode 拼音並聽取發音。
+- ✍️ **筆順描紅與手寫畫布**：完整向量筆順路徑與標準書寫順序指南，支援觸控描紅與清除。
+- 🗣️ **聲道剖面與口型圖解**：直觀展示軟顎音、齒齦音、雙唇音與齒音的舌位與氣流方向。
+- ⌨️ **韓語鍵盤速打遊戲**：內置 두벌식 (2-Set Dubeolsik) 虛擬鍵盤與實時間拼字引擎，支援得分與最高分記錄。
+- 🎙️ **AI 麥克風發音評估**：基於 Web Speech API 實時識別韓語朗讀，計算發音匹配度與評分。
+- 💖 **K-Pop & 影視詞典**：精選韓劇浪漫金句與日常高頻詞彙，支援按字拆解與拼音音節學習。
+- 🎧 **隨身聽跟讀模式 (Commuter Mode)**：自動循環播放 30+ 詞彙，支援 🔀 隨機打亂與盲聽跟讀測試。
+- 🎓 **SuperMemo SM-2 SRS 記憶卡片**：基於間隔重複演算法，按 `重來`、`困難`、`良好`、`簡單` 智能調度複習計劃。
+- 📲 **PWA 離線支援**：支援添加到手機桌面與 Service Worker 離線資源快取。
+- 🧪 **自動化測試套件**：43+ 單元測試覆蓋拼音合成、鍵盤映射、SRS 調度演算法與資料校驗。
 
 ---
 
