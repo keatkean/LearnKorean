@@ -1,6 +1,6 @@
 /**
  * Iconic Korean Vocabulary Dataset & Dynamic Syllable Extractor
- * Contains curated K-Culture, K-Pop, K-Drama, and Daily Essential phrases.
+ * Contains curated K-Culture, K-Pop, K-Drama, Romantic Sentences, and Daily Essential phrases.
  */
 
 export interface VocabItem {
@@ -11,7 +11,7 @@ export interface VocabItem {
     en: string;
     zh: string;
   };
-  category: 'kculture' | 'kdrama' | 'kpop' | 'essential';
+  category: 'kculture' | 'kdrama' | 'kpop' | 'essential' | 'romance';
   culturalNote: string;
 }
 
@@ -20,13 +20,96 @@ export function getSyllableBlocks(text: string): string[] {
 }
 
 export const CURATED_VOCABULARY: VocabItem[] = [
+  // --- Romantic K-Drama & K-Pop Expressions ---
+  {
+    id: 'saranghae',
+    korean: '사랑해',
+    romanization: 'sa-rang-hae',
+    translation: { en: 'I love you (Casual / Intimate)', zh: '我爱你' },
+    category: 'romance',
+    culturalNote: 'The most iconic romantic expression in K-Dramas and K-Pop love songs.'
+  },
+  {
+    id: 'yeongwonhi',
+    korean: '영원히 사랑해',
+    romanization: 'yeong-won-hi sa-rang-hae',
+    translation: { en: 'I will love you forever', zh: '我永远爱你' },
+    category: 'romance',
+    culturalNote: 'Classic romantic vow heard in dramatic K-Drama climax confession scenes.'
+  },
+  {
+    id: 'nae_gyeote',
+    korean: '내 곁에 있어줘',
+    romanization: 'nae gyeot-e is-seo-jwo',
+    translation: { en: 'Please stay by my side', zh: '请留在我的身边' },
+    category: 'romance',
+    culturalNote: 'Deeply emotional line featured in K-Drama OST lyrics.'
+  },
+  {
+    id: 'neobakke',
+    korean: '너밖에 없어',
+    romanization: 'neo-bak-ke eop-seo',
+    translation: { en: 'You are the only one for me', zh: '我只有你 / 你是我的唯一' },
+    category: 'romance',
+    culturalNote: 'Passionate romantic declaration used when expressing exclusive devotion.'
+  },
+  {
+    id: 'cheotnun',
+    korean: '첫눈에 반했어',
+    romanization: 'cheot-nun-e ban-haes-seo',
+    translation: { en: 'I fell in love at first sight', zh: '我一见钟情了' },
+    category: 'romance',
+    culturalNote: 'Iconic romance trope phrase used in meet-cute K-Drama scenes.'
+  },
+  {
+    id: 'maeum',
+    korean: '내 마음을 받아줘',
+    romanization: 'nae ma-eum-eul ba-da-jwo',
+    translation: { en: 'Please accept my heart / feelings', zh: '请接受我的心意' },
+    category: 'romance',
+    culturalNote: 'Traditional confession phrase when giving a love letter or gift.'
+  },
+  {
+    id: 'hamkke',
+    korean: '너랑 함께하고 싶어',
+    romanization: 'neo-rang ham-kke-ha-go si-peo',
+    translation: { en: 'I want to be together with you', zh: '我想和你在一起' },
+    category: 'romance',
+    culturalNote: 'Heartfelt proposal sentence expressing the desire to share life together.'
+  },
+  {
+    id: 'yeonin',
+    korean: '연인',
+    romanization: 'yeon-in',
+    translation: { en: 'Lovers / Sweetheart', zh: '恋人 / 爱人' },
+    category: 'romance',
+    culturalNote: 'Poetic Korean noun for romantic partners, hit drama title.'
+  },
+  {
+    id: 'simjang',
+    korean: '심장이 뛰어',
+    romanization: 'sim-jang-i ttwi-eo',
+    translation: { en: 'My heart is pounding', zh: '我的心在跳动 / 心跳加速' },
+    category: 'romance',
+    culturalNote: 'Describes the physical thrill of being close to the person you love.'
+  },
+  {
+    id: 'unmyeong',
+    korean: '운명',
+    romanization: 'un-myeong',
+    translation: { en: 'Destiny / Fate', zh: '命运 (命中注定)' },
+    category: 'romance',
+    culturalNote: 'Famous theme in fantasy romance K-Dramas (e.g. "My Love from the Star" OST).'
+  },
+
+  // --- K-Culture, K-Pop, K-Drama Essentials ---
   {
     id: 'sarang',
     korean: '사랑',
     romanization: 'sa-rang',
     translation: { en: 'Love', zh: '爱 / 爱情' },
     category: 'kculture',
-    culturalNote: 'One of the most used words in Korean ballads, K-Dramas (e.g. 사랑해요 - I love you), and lyrics.'
+    culturalNote: 'One of the most used words in Korean ballads, K-Dramas, and lyrics.'
   },
   {
     id: 'daebak',

@@ -80,7 +80,7 @@ export const VocabExplorerModal: React.FC<VocabExplorerModalProps> = ({
 
           {/* Category Filters */}
           <div className="flex items-center gap-1.5 overflow-x-auto w-full sm:w-auto">
-            {['all', 'kculture', 'kdrama', 'kpop', 'essential'].map((cat) => (
+            {['all', 'romance', 'kculture', 'kdrama', 'kpop', 'essential'].map((cat) => (
               <button
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
