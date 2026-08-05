@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState } from 'react';
-import { KOREAN_VOCABULARY, VocabItem } from '@/lib/koreanVocabData';
-import { Sparkles, Volume2, Search, X, Tag } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { CURATED_VOCABULARY, VocabItem, getSyllableBlocks, getStoredCustomVocab, saveCustomVocabItem } from '@/lib/koreanVocabData';
+import { Sparkles, Volume2, Search, X, Plus, BookOpen, Check } from 'lucide-react';
 import { Translations, Locale } from '@/lib/i18n';
 
 interface VocabExplorerModalProps {
@@ -22,10 +22,54 @@ export const VocabExplorerModal: React.FC<VocabExplorerModalProps> = ({
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [vocabList, setVocabList] = useState<VocabItem[]>(CURATED_VOCABULARY);
+  const [isAddingNew, setIsAddingNew] = useState(false);
+
+  // New Word Form State
+  const [newKorean, setNewKorean] = useState('');
+  const [newRom, setNewRom] = useState('');
+  const [newTransEn, setNewTransEn] = useState('');
+  const [newTransZh, setNewTransZh] = useState('');
+  const [newNote, setNewNote] = useState('');
+
+  useEffect(() => {
+    if (isOpen) {
+      const customItems = getStoredCustomVocab();
+      setVocabList([...customItems, ...CURATED_VOCABULARY]);
+    }
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
-  const filteredVocab = KOREAN_VOCABULARY.filter((v) => {
+  const handleAddCustomWord = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newKorean.trim()) return;
+
+    const newItem: VocabItem = {
+      id: `custom_${Date.now()}`,
+      korean: newKorean.trim(),
+      romanization: newRom.trim() || newKorean.trim(),
+      translation: {
+        en: newTransEn.trim() || newKorean.trim(),
+        zh: newTransZh.trim() || newTransEn.trim() || newKorean.trim(),
+      },
+      category: 'custom',
+      culturalNote: newNote.trim() || 'User added custom vocabulary word.',
+    };
+
+    const updated = saveCustomVocabItem(newItem);
+    setVocabList([...updated, ...CURATED_VOCABULARY]);
+
+    // Reset Form
+    setNewKorean('');
+    setNewRom('');
+    setNewTransEn('');
+    setNewTransZh('');
+    setNewNote('');
+    setIsAddingNew(false);
+  };
+
+  const filteredVocab = vocabList.filter((v) => {
     const matchesCategory = selectedCategory === 'all' || v.category === selectedCategory;
     const matchesSearch =
       v.korean.includes(searchTerm) ||
@@ -47,10 +91,10 @@ export const VocabExplorerModal: React.FC<VocabExplorerModalProps> = ({
             </div>
             <div>
               <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100">
-                K-Pop & K-Drama Vocabulary Explorer
+                Dynamic K-Culture Vocabulary Explorer
               </h2>
               <p className="text-xs text-slate-500 dark:text-slate-400">
-                Learn iconic Korean words with syllable block breakdowns & cultural context
+                Explore curated K-Pop/K-Drama words & add your own custom phrases
               </p>
             </div>
           </div>
@@ -63,7 +107,7 @@ export const VocabExplorerModal: React.FC<VocabExplorerModalProps> = ({
           </button>
         </div>
 
-        {/* Search & Category Filter Bar */}
+        {/* Search, Filter & Add Word Toolbar */}
         <div className="flex flex-col sm:flex-row gap-3 items-center justify-between">
           
           {/* Search Bar */}
@@ -73,14 +117,14 @@ export const VocabExplorerModal: React.FC<VocabExplorerModalProps> = ({
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Search words..."
+              placeholder="Search vocabulary..."
               className="w-full text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl pl-9 pr-4 py-2.5 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
           </div>
 
-          {/* Category Filter Chips */}
+          {/* Category Filters */}
           <div className="flex items-center gap-1.5 overflow-x-auto w-full sm:w-auto">
-            {['all', 'kculture', 'kdrama', 'kpop', 'essential'].map((cat) => (
+            {['all', 'kculture', 'kdrama', 'kpop', 'essential', 'custom'].map((cat) => (
               <button
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
@@ -93,59 +137,146 @@ export const VocabExplorerModal: React.FC<VocabExplorerModalProps> = ({
                 {cat}
               </button>
             ))}
+
+            <button
+              onClick={() => setIsAddingNew(!isAddingNew)}
+              className="flex items-center gap-1 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl transition-all shadow-sm whitespace-nowrap"
+            >
+              <Plus className="w-3.5 h-3.5" />
+              <span>Add Word</span>
+            </button>
           </div>
 
         </div>
 
+        {/* Custom Word Form Modal Collapse */}
+        {isAddingNew && (
+          <form
+            onSubmit={handleAddCustomWord}
+            className="bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900/60 rounded-2xl p-4 flex flex-col gap-3 animate-fade-in"
+          >
+            <div className="text-xs font-bold text-emerald-800 dark:text-emerald-300 flex items-center gap-1.5">
+              <BookOpen className="w-4 h-4" />
+              <span>Add New Custom Korean Vocabulary Word</span>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <input
+                type="text"
+                required
+                value={newKorean}
+                onChange={(e) => setNewKorean(e.target.value)}
+                placeholder="Korean Word (e.g. 우영우)"
+                className="text-xs bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              />
+              <input
+                type="text"
+                value={newRom}
+                onChange={(e) => setNewRom(e.target.value)}
+                placeholder="Romanization (e.g. Woo Young-woo)"
+                className="text-xs bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              />
+              <input
+                type="text"
+                value={newTransEn}
+                onChange={(e) => setNewTransEn(e.target.value)}
+                placeholder="English Translation"
+                className="text-xs bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              />
+              <input
+                type="text"
+                value={newTransZh}
+                onChange={(e) => setNewTransZh(e.target.value)}
+                placeholder="Chinese Translation (中文翻译)"
+                className="text-xs bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              />
+            </div>
+
+            <input
+              type="text"
+              value={newNote}
+              onChange={(e) => setNewNote(e.target.value)}
+              placeholder="Cultural Note / Drama Context"
+              className="text-xs bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            />
+
+            <div className="flex justify-end gap-2 mt-1">
+              <button
+                type="button"
+                onClick={() => setIsAddingNew(false)}
+                className="text-xs text-slate-500 hover:text-slate-700 px-3 py-1.5"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="flex items-center gap-1 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-1.5 rounded-xl shadow-sm"
+              >
+                <Check className="w-3.5 h-3.5" />
+                <span>Save Word</span>
+              </button>
+            </div>
+          </form>
+        )}
+
         {/* Vocabulary Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {filteredVocab.map((item) => (
-            <div
-              key={item.id}
-              className="bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/80 rounded-2xl p-4 flex flex-col justify-between gap-3 hover:border-indigo-400 dark:hover:border-indigo-600 transition-all shadow-sm"
-            >
-              <div className="flex items-start justify-between">
-                <div>
-                  <div className="text-2xl font-black text-slate-800 dark:text-slate-100 tracking-wide">
-                    {item.korean}
+          {filteredVocab.map((item) => {
+            const blocks = getSyllableBlocks(item.korean);
+            return (
+              <div
+                key={item.id}
+                className="bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/80 rounded-2xl p-4 flex flex-col justify-between gap-3 hover:border-indigo-400 dark:hover:border-indigo-600 transition-all shadow-sm relative"
+              >
+                {item.category === 'custom' && (
+                  <span className="absolute top-3 right-12 text-[10px] font-bold bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 px-2 py-0.5 rounded-md">
+                    Custom
+                  </span>
+                )}
+
+                <div className="flex items-start justify-between">
+                  <div>
+                    <div className="text-2xl font-black text-slate-800 dark:text-slate-100 tracking-wide">
+                      {item.korean}
+                    </div>
+                    <div className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 mt-0.5">
+                      [{item.romanization}]
+                    </div>
                   </div>
-                  <div className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 mt-0.5">
-                    [{item.romanization}]
-                  </div>
+
+                  <button
+                    onClick={() => onSpeak(item.korean)}
+                    className="p-2.5 bg-indigo-50 dark:bg-indigo-950/80 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-600 hover:text-white rounded-xl transition-colors shadow-xs"
+                    aria-label={`Pronounce ${item.korean}`}
+                  >
+                    <Volume2 className="w-4 h-4" />
+                  </button>
                 </div>
 
-                <button
-                  onClick={() => onSpeak(item.korean)}
-                  className="p-2.5 bg-indigo-50 dark:bg-indigo-950/80 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-600 hover:text-white rounded-xl transition-colors shadow-xs"
-                  aria-label={`Pronounce ${item.korean}`}
-                >
-                  <Volume2 className="w-4 h-4" />
-                </button>
-              </div>
+                <div className="text-xs font-bold text-slate-700 dark:text-slate-300">
+                  {locale === 'zh-CN' ? item.translation.zh : item.translation.en}
+                </div>
 
-              <div className="text-xs font-bold text-slate-700 dark:text-slate-300">
-                {locale === 'zh-CN' ? item.translation.zh : item.translation.en}
-              </div>
+                {/* Dynamic Syllable Block Extraction */}
+                <div className="flex items-center gap-1.5 pt-1 border-t border-slate-200/60 dark:border-slate-700/60">
+                  <span className="text-[10px] text-slate-400 font-semibold">Dynamic Blocks:</span>
+                  {blocks.map((s, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => onSpeak(s)}
+                      className="text-[11px] font-bold bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 px-2 py-0.5 rounded-md hover:border-indigo-400 cursor-pointer transition-colors"
+                    >
+                      {s}
+                    </button>
+                  ))}
+                </div>
 
-              {/* Syllable Decomposition Tag */}
-              <div className="flex items-center gap-1.5 pt-1 border-t border-slate-200/60 dark:border-slate-700/60">
-                <span className="text-[10px] text-slate-400 font-semibold">Blocks:</span>
-                {item.syllables.map((s, idx) => (
-                  <span
-                    key={idx}
-                    onClick={() => onSpeak(s)}
-                    className="text-[11px] font-bold bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 px-2 py-0.5 rounded-md hover:border-indigo-400 cursor-pointer transition-colors"
-                  >
-                    {s}
-                  </span>
-                ))}
+                <p className="text-[11px] text-slate-500 dark:text-slate-400 italic">
+                  {item.culturalNote}
+                </p>
               </div>
-
-              <p className="text-[11px] text-slate-500 dark:text-slate-400 italic">
-                {item.culturalNote}
-              </p>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
       </div>

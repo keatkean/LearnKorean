@@ -1,6 +1,6 @@
 import { getSyllableChar, CHOSEONG } from '../lib/hangulData';
 import { calculateSM2 } from '../lib/srsStorage';
-import { KOREAN_VOCABULARY } from '../lib/koreanVocabData';
+import { KOREAN_VOCABULARY, getSyllableBlocks } from '../lib/koreanVocabData';
 
 function assertEqual(actual: any, expected: any, testName: string) {
   const actualStr = JSON.stringify(actual);
@@ -30,15 +30,16 @@ export function runQAAuditTests() {
   const card0 = calculateSM2(null, 0);
   assertEqual(card0.easeFactor >= 1.3, true, 'Ease factor clamp >= 1.3');
 
-  // Test 3: Vocabulary Data Integrity Audit
+  // Test 3: Vocabulary Data Integrity & Dynamic Syllable Extraction Audit
   assertEqual(KOREAN_VOCABULARY.length >= 10, true, 'K-Culture Vocabulary contains 10+ entries');
   KOREAN_VOCABULARY.forEach((vocab) => {
-    if (!vocab.id || !vocab.korean || !vocab.romanization || !vocab.syllables.length) {
+    const blocks = getSyllableBlocks(vocab.korean);
+    if (!vocab.id || !vocab.korean || !vocab.romanization || !blocks.length) {
       console.error(`✗ FAIL: Malformed vocabulary item: ${vocab.id}`);
       process.exitCode = 1;
     }
   });
-  console.log('✓ PASS: All vocabulary records pass schema validation');
+  console.log('✓ PASS: All vocabulary records pass dynamic schema validation');
 }
 
 if (require.main === module) {
