@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>韩语四十音发音跟读表</title>
+    <style>
+        :root {
+            --header-bg: #8594e8;
+            --text-dark: #1f2937;
+            --rom-red: #d92525;
+            --missing-badge: #e11d48;
+            --missing-bg: #fff1f2;
+            --border-color: #f1f5f9;
+            --hover-bg: #eff6ff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "PingFang SC", "Microsoft YaHei", sans-serif;
+        }
+
+        body {
+            background-color: #f8fafc;
+            color: var(--text-dark);
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .main-container {
+            width: 100%;
+            max-width: 900px;
+            background: #ffffff;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        /* Top Title Banner matching picture */
+        .title-banner {
+            background-color: var(--header-bg);
+            color: #ffffff;
+            text-align: center;
+            padding: 1.25rem 0.5rem;
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+        }
+
+        /* Controls & Tab Switching */
+        .controls {
+            padding: 1rem;
+            background-color: #ffffff;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .tab-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid #cbd5e1;
+            background: #ffffff;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #475569;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tab-btn:hover {
+            border-color: var(--header-bg);
+            color: var(--header-bg);
+        }
+
+        .tab-btn.active {
+            background-color: var(--header-bg);
+            color: #ffffff;
+            border-color: var(--header-bg);
+        }
+
+        .tab-btn.highlight {
+            border-color: var(--missing-badge);
+            color: var(--missing-badge);
+        }
+
+        .tab-btn.highlight.active {
+            background-color: var(--missing-badge);
+            color: #ffffff;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            width: 100%;
+        }
+
+        /* Grid Table matching image layout */
+        table.hangul-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+            user-select: none;
+        }
+
+        table.hangul-table th, 
+        table.hangul-table td {
+            padding: 0.5rem 0.25rem;
+            border: 1px solid #f1f5f9;
+            vertical-align: middle;
+            min-width: 55px;
+        }
+
+        /* Vowel Header Row */
+        .vowel-header {
+            background-color: #ffffff;
+        }
+
+        .vowel-char {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            line-height: 1.1;
+        }
+
+        .vowel-rom {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--rom-red);
+        }
+
+        /* Consonant Left Column */
+        .consonant-cell {
+            background-color: #ffffff;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .consonant-char {
+            font-size: 1.25rem;
+            color: var(--text-dark);
+            display: inline-block;
+        }
+
+        .consonant-rom {
+            font-size: 0.85rem;
+            color: var(--rom-red);
+            display: inline-block;
+            margin-left: 2px;
+        }
+
+        /* Syllable Data Cells */
+        .cell {
+            cursor: pointer;
+            transition: background-color 0.15s ease, transform 0.1s ease;
+        }
+
+        .cell:hover {
+            background-color: var(--hover-bg);
+        }
+
+        .cell:active {
+            transform: scale(0.95);
+        }
+
+        .cell.is-missing {
+            background-color: var(--missing-bg);
+        }
+
+        .hangul-syllable {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            line-height: 1.1;
+        }
+
+        .hangul-rom {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--rom-red);
+        }
+
+        .missing-tag {
+            font-size: 0.65rem;
+            color: var(--missing-badge);
+            display: block;
+            font-weight: 700;
+        }
+
+        .footer-note {
+            text-align: center;
+            padding: 0.75rem;
+            font-size: 0.8rem;
+            color: #64748b;
+            background-color: #fafafa;
+            border-top: 1px solid var(--border-color);
+        }
+    </style>
+</head>
+<body>
+
+<div class="main-container">
+    <!-- Top Banner Image Style -->
+    <div class="title-banner">
+        韩语四十音发音跟读
+    </div>
+
+    <!-- Navigation / Matrix Views -->
+    <div class="controls">
+        <button class="tab-btn active" onclick="switchView('basic', this)">基本音 (14×10 原图结构)</button>
+        <button class="tab-btn highlight" onclick="switchView('tense', this)">⭐ 补全：紧辅音 (5×10)</button>
+        <button class="tab-btn highlight" onclick="switchView('complex', this)">⭐ 补全：复元音 (14×11)</button>
+        <button class="tab-btn" onclick="switchView('full', this)">完整四十音总表 (19×21)</button>
+    </div>
+
+    <!-- Interactive Grid Table -->
+    <div class="table-wrapper">
+        <table class="hangul-table" id="hangulTable">
+            <!-- Table content dynamically generated by JavaScript -->
+        </table>
+    </div>
+
+    <div class="footer-note">
+        💡 点击任意单元格（或表头字母）即可播放标准韩语发音
+    </div>
+</div>
+
+<script>
+    // Hangul Unicode Mapping Constants
+    const CHOSEONG = [
+        { char: 'ㄱ', rom: 'g', choIdx: 0, missing: false },
+        { char: 'ㄴ', rom: 'n', choIdx: 2, missing: false },
+        { char: 'ㄷ', rom: 'd', choIdx: 3, missing: false },
+        { char: 'ㄹ', rom: 'l', choIdx: 5, missing: false },
+        { char: 'ㅁ', rom: 'm', choIdx: 6, missing: false },
+        { char: 'ㅂ', rom: 'b', choIdx: 7, missing: false },
+        { char: 'ㅅ', rom: 's', choIdx: 9, missing: false },
+        { char: 'ㅇ', rom: '',  choIdx: 11, missing: false },
+        { char: 'ㅈ', rom: 'z', choIdx: 12, missing: false },
+        { char: 'ㅊ', rom: 'cc', choIdx: 14, missing: false },
+        { char: 'ㅋ', rom: 'kk', choIdx: 15, missing: false },
+        { char: 'ㅌ', rom: 'tt', choIdx: 16, missing: false },
+        { char: 'ㅍ', rom: 'pp', choIdx: 17, missing: false },
+        { char: 'ㅎ', rom: 'hh', choIdx: 18, missing: false },
+        // 5 Tense Consonants (Previously Missing)
+        { char: 'ㄲ', rom: 'gg', choIdx: 1, missing: true },
+        { char: 'ㄸ', rom: 'dd', choIdx: 4, missing: true },
+        { char: 'ㅃ', rom: 'bb', choIdx: 8, missing: true },
+        { char: 'ㅆ', rom: 'ss', choIdx: 10, missing: true },
+        { char: 'ㅉ', rom: 'jj', choIdx: 13, missing: true }
+    ];
+
+    const JUNGSEONG = [
+        // 10 Basic Vowels
+        { char: 'ㅏ', rom: 'a', jungIdx: 0, missing: false },
+        { char: 'ㅑ', rom: 'ya', jungIdx: 2, missing: false },
+        { char: 'ㅓ', rom: 'eo', jungIdx: 4, missing: false },
+        { char: 'ㅕ', rom: 'yeo', jungIdx: 6, missing: false },
+        { char: 'ㅗ', rom: 'o', jungIdx: 8, missing: false },
+        { char: 'ㅛ', rom: 'yo', jungIdx: 12, missing: false },
+        { char: 'ㅜ', rom: 'u', jungIdx: 13, missing: false },
+        { char: 'ㅠ', rom: 'yu', jungIdx: 17, missing: false },
+        { char: 'ㅡ', rom: 'eu', jungIdx: 18, missing: false },
+        { char: 'ㅣ', rom: 'i', jungIdx: 20, missing: false },
+        // 11 Complex Vowels (Previously Missing)
+        { char: 'ㅐ', rom: 'ae', jungIdx: 1, missing: true },
+        { char: 'ㅒ', rom: 'yae', jungIdx: 3, missing: true },
+        { char: 'ㅔ', rom: 'e', jungIdx: 5, missing: true },
+        { char: 'ㅖ', rom: 'ye', jungIdx: 7, missing: true },
+        { char: 'ㅘ', rom: 'wa', jungIdx: 9, missing: true },
+        { char: 'ㅙ', rom: 'wae', jungIdx: 10, missing: true },
+        { char: 'ㅚ', rom: 'oe', jungIdx: 11, missing: true },
+        { char: 'ㅝ', rom: 'wo', jungIdx: 14, missing: true },
+        { char: 'ㅞ', rom: 'we', jungIdx: 15, missing: true },
+        { char: 'ㅟ', rom: 'wi', jungIdx: 16, missing: true },
+        { char: 'ㅢ', rom: 'ui', jungIdx: 19, missing: true }
+    ];
+
+    // Compute combined Hangul syllable block
+    function getSyllable(choIdx, jungIdx) {
+        const unicode = 0xAC00 + (choIdx * 588) + (jungIdx * 28);
+        return String.fromCharCode(unicode);
+    }
+
+    // Speech Synthesis
+    function speak(text) {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'ko-KR';
+            utterance.rate = 0.85;
+            window.speechSynthesis.speak(utterance);
+        }
+    }
+
+    // Build Table Matrix
+    function renderTable(consonants, vowels) {
+        const table = document.getElementById('hangulTable');
+        table.innerHTML = '';
+
+        // 1. Header Row (Vowels)
+        const thead = document.createElement('thead');
+        const headerRow = document.createElement('tr');
+        
+        // Empty top-left cell
+        const emptyTh = document.createElement('th');
+        headerRow.appendChild(emptyTh);
+
+        vowels.forEach(v => {
+            const th = document.createElement('th');
+            th.className = 'vowel-header cell';
+            if (v.missing) th.classList.add('is-missing');
+            th.onclick = () => speak(v.char);
+            th.innerHTML = `
+                <div class="vowel-char">${v.char}</div>
+                <div class="vowel-rom">${v.rom}</div>
+                ${v.missing ? '<span class="missing-tag">补全</span>' : ''}
+            `;
+            headerRow.appendChild(th);
+        });
+        thead.appendChild(headerRow);
+        table.appendChild(thead);
+
+        // 2. Table Body (Consonants × Vowels)
+        const tbody = document.createElement('tbody');
+        consonants.forEach(c => {
+            const row = document.createElement('tr');
+
+            // Leftmost Consonant Cell
+            const cCell = document.createElement('td');
+            cCell.className = 'consonant-cell cell';
+            if (c.missing) cCell.classList.add('is-missing');
+            cCell.onclick = () => speak(c.char + 'ㅏ');
+            cCell.innerHTML = `
+                <span class="consonant-char">${c.char}</span>
+                <span class="consonant-rom">(${c.rom})</span>
+                ${c.missing ? '<span class="missing-tag">双辅音</span>' : ''}
+            `;
+            row.appendChild(cCell);
+
+            // Syllable Cells
+            vowels.forEach(v => {
+                const td = document.createElement('td');
+                td.className = 'cell';
+                if (c.missing || v.missing) td.classList.add('is-missing');
+
+                const syllable = getSyllable(c.choIdx, v.jungIdx);
+                const romCombo = c.rom + v.rom;
+
+                td.onclick = () => speak(syllable);
+                td.innerHTML = `
+                    <div class="hangul-syllable">${syllable}</div>
+                    <div class="hangul-rom">${romCombo}</div>
+                `;
+                row.appendChild(td);
+            });
+
+            tbody.appendChild(row);
+        });
+        table.appendChild(tbody);
+    }
+
+    // Switch Matrix Views
+    function switchView(type, btnElement) {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        if (btnElement) btnElement.classList.add('active');
+
+        const basicConsonants = CHOSEONG.filter(c => !c.missing);
+        const tenseConsonants = CHOSEONG.filter(c => c.missing);
+        const basicVowels = JUNGSEONG.filter(v => !v.missing);
+        const complexVowels = JUNGSEONG.filter(v => v.missing);
+
+        if (type === 'basic') {
+            renderTable(basicConsonants, basicVowels);
+        } else if (type === 'tense') {
+            renderTable(tenseConsonants, basicVowels);
+        } else if (type === 'complex') {
+            renderTable(basicConsonants, complexVowels);
+        } else if (type === 'full') {
+            renderTable(CHOSEONG, JUNGSEONG);
+        }
+    }
+
+    // Initial Load: Render exact basic 14x10 grid from picture
+    switchView('basic', document.querySelectorAll('.tab-btn')[0]);
+</script>
+
+</body>
+</html>
