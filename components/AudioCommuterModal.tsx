@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Play, Pause, SkipForward, Headphones, X, Eye, EyeOff, RotateCcw, Shuffle } from 'lucide-react';
+import { Play, Pause, SkipForward, Headphones, X, Eye, EyeOff, RotateCcw, Shuffle, Volume2 } from 'lucide-react';
 import { Translations, Locale } from '@/lib/i18n';
 
 interface AudioCommuterModalProps {
@@ -72,10 +72,20 @@ export const AudioCommuterModal: React.FC<AudioCommuterModalProps> = ({
 
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
+  // Helper to ensure SpeechSynthesis is un-paused
+  const triggerAudio = (text: string) => {
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      if (window.speechSynthesis.paused) {
+        window.speechSynthesis.resume();
+      }
+    }
+    onSpeak(text);
+  };
+
   useEffect(() => {
     if (isPlayingQueue && isOpen && items.length > 0) {
       const current = items[currentIndex];
-      onSpeak(current.hangul);
+      triggerAudio(current.hangul);
 
       timerRef.current = setTimeout(() => {
         setCurrentIndex((prev) => (prev + 1) % items.length);
@@ -87,26 +97,44 @@ export const AudioCommuterModal: React.FC<AudioCommuterModalProps> = ({
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
     };
-  }, [isPlayingQueue, currentIndex, isOpen, speedMultiplier, onSpeak, items]);
+  }, [isPlayingQueue, currentIndex, isOpen, speedMultiplier, items]);
 
   if (!isOpen) return null;
 
   const currentItem = items[currentIndex] || items[0];
   const itemLabel = currentItem ? (currentItem.label[locale] || currentItem.label['en']) : '';
 
+  const handleTogglePlay = () => {
+    const nextState = !isPlayingQueue;
+    setIsPlayingQueue(nextState);
+    if (nextState) {
+      triggerAudio(currentItem.hangul);
+    } else {
+      if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+    }
+  };
+
   const handleNext = () => {
-    setCurrentIndex((prev) => (prev + 1) % items.length);
+    const nextIndex = (currentIndex + 1) % items.length;
+    setCurrentIndex(nextIndex);
+    triggerAudio(items[nextIndex].hangul);
   };
 
   const handleReset = () => {
     setCurrentIndex(0);
     setIsPlayingQueue(false);
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+    }
   };
 
   const handleShuffle = () => {
     const shuffled = [...COMMUTER_DRILL_ITEMS].sort(() => Math.random() - 0.5);
     setItems(shuffled);
     setCurrentIndex(0);
+    triggerAudio(shuffled[0].hangul);
   };
 
   return (
@@ -131,6 +159,9 @@ export const AudioCommuterModal: React.FC<AudioCommuterModalProps> = ({
           <button
             onClick={() => {
               setIsPlayingQueue(false);
+              if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+              }
               onClose();
             }}
             className="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-lg transition-colors"
@@ -156,10 +187,15 @@ export const AudioCommuterModal: React.FC<AudioCommuterModalProps> = ({
             {t.commuterTrackCount} {currentIndex + 1} / {items.length}
           </div>
 
-          {/* Main Character Display */}
-          <div className="text-7xl font-black tracking-wider transition-all transform scale-105 min-h-[96px] flex items-center justify-center text-center px-2">
-            {hideText ? '?' : currentItem.hangul}
-          </div>
+          {/* Main Character Display - Clickable for Instant Audio */}
+          <button
+            onClick={() => triggerAudio(currentItem.hangul)}
+            className="text-7xl font-black tracking-wider transition-all transform hover:scale-110 active:scale-95 min-h-[96px] flex items-center justify-center text-center px-2 cursor-pointer group"
+            title="Click to replay sound"
+          >
+            <span>{hideText ? '?' : currentItem.hangul}</span>
+            <Volume2 className="w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity ml-2 text-indigo-200" />
+          </button>
 
           <div className="text-xs font-semibold text-indigo-100 bg-white/10 px-4 py-1.5 rounded-full text-center">
             {hideText ? t.commuterBlindHint : itemLabel}
@@ -184,7 +220,7 @@ export const AudioCommuterModal: React.FC<AudioCommuterModalProps> = ({
             </button>
 
             <button
-              onClick={() => setIsPlayingQueue(!isPlayingQueue)}
+              onClick={handleTogglePlay}
               className="p-5 bg-white text-indigo-700 hover:bg-indigo-50 rounded-full shadow-lg transform active:scale-95 transition-all"
             >
               {isPlayingQueue ? <Pause className="w-7 h-7" /> : <Play className="w-7 h-7 ml-0.5" />}

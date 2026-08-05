@@ -74,6 +74,9 @@ export function useSpeech(): UseSpeechReturn {
         return;
       }
 
+      if (window.speechSynthesis.paused) {
+        window.speechSynthesis.resume();
+      }
       window.speechSynthesis.cancel();
 
       const utterance = new SpeechSynthesisUtterance(text);
@@ -115,6 +118,9 @@ export function useSpeech(): UseSpeechReturn {
       };
 
       window.speechSynthesis.speak(utterance);
+      if (window.speechSynthesis.paused) {
+        window.speechSynthesis.resume();
+      }
     },
     [rate, selectedVoice]
   );
