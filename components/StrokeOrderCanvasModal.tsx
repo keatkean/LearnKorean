@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { HANGUL_STROKE_DATA, getCharacterStrokes } from '@/lib/hangulStrokes';
-import { Edit3, Play, Trash2, X, Volume2, CheckCircle } from 'lucide-react';
+import { Edit3, Play, Trash2, X, Volume2, Search } from 'lucide-react';
 import { Translations } from '@/lib/i18n';
 
 interface StrokeOrderCanvasModalProps {
@@ -19,14 +19,15 @@ export const StrokeOrderCanvasModal: React.FC<StrokeOrderCanvasModalProps> = ({
   t,
 }) => {
   const [selectedChar, setSelectedChar] = useState<string>('ㄱ');
+  const [customInput, setCustomInput] = useState<string>('');
   const [isDrawing, setIsDrawing] = useState<boolean>(false);
   const [showDemo, setShowDemo] = useState<boolean>(false);
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
-  const charData = getCharacterStrokes(selectedChar);
+  const activeCharacter = customInput.trim() ? customInput.trim()[0] : selectedChar;
+  const charData = getCharacterStrokes(activeCharacter);
 
-  // Clear canvas
   const handleClear = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -38,7 +39,7 @@ export const StrokeOrderCanvasModal: React.FC<StrokeOrderCanvasModalProps> = ({
 
   useEffect(() => {
     handleClear();
-  }, [selectedChar]);
+  }, [selectedChar, customInput]);
 
   if (!isOpen) return null;
 
@@ -92,10 +93,10 @@ export const StrokeOrderCanvasModal: React.FC<StrokeOrderCanvasModalProps> = ({
             </div>
             <div>
               <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100">
-                Interactive Stroke-Order Canvas
+                Dynamic Stroke-Order & Writing Canvas
               </h2>
               <p className="text-xs text-slate-500 dark:text-slate-400">
-                Learn standard stroke order & trace with finger/mouse
+                Trace any consonant, vowel, or composed Hangul syllable
               </p>
             </div>
           </div>
@@ -108,21 +109,38 @@ export const StrokeOrderCanvasModal: React.FC<StrokeOrderCanvasModalProps> = ({
           </button>
         </div>
 
-        {/* Character Selection Bar */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-2">
-          {Object.keys(HANGUL_STROKE_DATA).map((char) => (
-            <button
-              key={char}
-              onClick={() => setSelectedChar(char)}
-              className={`w-11 h-11 text-lg font-bold rounded-xl flex-shrink-0 transition-all ${
-                selectedChar === char
-                  ? 'bg-indigo-600 text-white shadow-md scale-105'
-                  : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-indigo-50 dark:hover:bg-indigo-950'
-              }`}
-            >
-              {char}
-            </button>
-          ))}
+        {/* Custom Input & Quick Selector */}
+        <div className="flex flex-col sm:flex-row gap-3 items-center justify-between">
+          <div className="relative w-full sm:w-48">
+            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+            <input
+              type="text"
+              maxLength={2}
+              value={customInput}
+              onChange={(e) => setCustomInput(e.target.value)}
+              placeholder="Type any character..."
+              className="w-full text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl pl-9 pr-3 py-2 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+          </div>
+
+          <div className="flex items-center gap-1.5 overflow-x-auto w-full sm:w-auto pb-1">
+            {Object.keys(HANGUL_STROKE_DATA).slice(0, 16).map((char) => (
+              <button
+                key={char}
+                onClick={() => {
+                  setCustomInput('');
+                  setSelectedChar(char);
+                }}
+                className={`w-9 h-9 text-sm font-bold rounded-xl flex-shrink-0 transition-all ${
+                  selectedChar === char && !customInput
+                    ? 'bg-indigo-600 text-white shadow-md scale-105'
+                    : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-indigo-50 dark:hover:bg-indigo-950'
+                }`}
+              >
+                {char}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Canvas & Reference Grid */}
@@ -131,17 +149,16 @@ export const StrokeOrderCanvasModal: React.FC<StrokeOrderCanvasModalProps> = ({
           {/* Reference Stroke Order Display */}
           <div className="bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 flex flex-col items-center justify-center gap-3 min-h-[260px] relative">
             <div className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-              {charData?.name} ({charData?.romanization})
+              {charData?.name || `Character ${activeCharacter}`} ({charData?.romanization || 'Hangul'})
             </div>
 
             {/* SVG Reference Box */}
             <div className="relative w-48 h-48 bg-white dark:bg-slate-900 border border-dashed border-slate-300 dark:border-slate-700 rounded-xl flex items-center justify-center shadow-inner">
               <svg viewBox="0 0 200 200" className="w-full h-full p-2">
-                {/* Guidelines */}
                 <line x1="100" y1="0" x2="100" y2="200" stroke="#cbd5e1" strokeDasharray="4" strokeWidth="1" />
                 <line x1="0" y1="100" x2="200" y2="100" stroke="#cbd5e1" strokeDasharray="4" strokeWidth="1" />
 
-                {/* Stroke Order Paths */}
+                {/* Direct Vector Paths */}
                 {charData?.strokes.map((s, idx) => (
                   <path
                     key={idx}
@@ -154,15 +171,30 @@ export const StrokeOrderCanvasModal: React.FC<StrokeOrderCanvasModalProps> = ({
                     className={showDemo ? 'animate-pulse' : ''}
                   />
                 ))}
+
+                {/* SVG Character Font Watermark Fallback */}
+                {(!charData || charData.strokes.length === 0) && (
+                  <text
+                    x="100"
+                    y="140"
+                    textAnchor="middle"
+                    fill={showDemo ? '#4f46e5' : '#cbd5e1'}
+                    fontSize="110"
+                    fontWeight="bold"
+                    className={showDemo ? 'animate-pulse' : ''}
+                  >
+                    {activeCharacter}
+                  </text>
+                )}
               </svg>
             </div>
 
             <button
-              onClick={() => onSpeak(selectedChar)}
+              onClick={() => onSpeak(activeCharacter)}
               className="flex items-center gap-1.5 text-xs text-indigo-600 dark:text-indigo-400 font-semibold bg-indigo-50 dark:bg-indigo-950/60 px-3 py-1.5 rounded-lg hover:bg-indigo-100 transition-colors"
             >
               <Volume2 className="w-3.5 h-3.5" />
-              <span>Pronounce "{selectedChar}"</span>
+              <span>Pronounce "{activeCharacter}"</span>
             </button>
           </div>
 
