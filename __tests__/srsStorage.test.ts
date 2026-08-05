@@ -22,10 +22,22 @@ export function runSRSTests() {
   assertEqual(card2.repetitions, 2, 'Second good review -> repetitions = 2');
   assertEqual(card2.interval, 6, 'Second review -> interval = 6 days');
 
-  // Test 3: Failure reset (Again = 0)
-  const card3 = calculateSM2(card2, 0 as ReviewQuality);
-  assertEqual(card3.repetitions, 0, 'Failed review -> repetitions reset to 0');
-  assertEqual(card3.interval, 1, 'Failed review -> interval reset to 1 day');
+  // Test 3: Consecutive Easy reviews (repetition = 3)
+  const card3 = calculateSM2(card2, 5 as ReviewQuality);
+  assertEqual(card3.repetitions, 3, 'Third review -> repetitions = 3');
+  assertEqual(card3.interval > 6, true, 'Third review -> interval grows > 6 days');
+
+  // Test 4: Failure reset (Again = 0)
+  const card4 = calculateSM2(card3, 0 as ReviewQuality);
+  assertEqual(card4.repetitions, 0, 'Failed review -> repetitions reset to 0');
+  assertEqual(card4.interval, 1, 'Failed review -> interval reset to 1 day');
+
+  // Test 5: Multiple failures ease factor clamp check (must stay >= 1.3)
+  let clampedCard = calculateSM2(null, 0);
+  for (let i = 0; i < 10; i++) {
+    clampedCard = calculateSM2(clampedCard, 0);
+  }
+  assertEqual(clampedCard.easeFactor >= 1.3, true, 'Multiple failures -> easeFactor clamped >= 1.3');
 }
 
 if (require.main === module) {
