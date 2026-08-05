@@ -47,6 +47,12 @@ export interface Translations {
   builderJungLabel: string;
   builderJongLabel: string;
   builderResultLabel: string;
+  builderListenSound: string;
+  builderReset: string;
+  builderNoBatchim: string;
+  builderInitialTag: string;
+  builderVowelTag: string;
+  builderBatchimTag: string;
 
   // Stroke Order Modal
   strokeTitle: string;
@@ -55,10 +61,16 @@ export interface Translations {
   strokeClearBtn: string;
   strokeGuideBtn: string;
   strokeHideGuideBtn: string;
+  strokeDrawHere: string;
+  strokePronounceBtn: string;
 
   // Vocal Tract Guide Modal
   vocalTitle: string;
   vocalSubtitle: string;
+  vocalDiagramNote: string;
+  vocalTrySounds: string;
+  vocalTongueLabel: string;
+  vocalAirflowLabel: string;
 
   // Typing Game Modal
   typingTitle: string;
@@ -68,12 +80,17 @@ export interface Translations {
   typingReset: string;
   typingTargetLabel: string;
   typingInputPlaceholder: string;
+  typingKeyboardHeader: string;
+  typingBackspace: string;
 
   // Pronunciation Evaluator Modal
   evalTitle: string;
   evalSubtitle: string;
   evalStartMic: string;
   evalListening: string;
+  evalTargetLabel: string;
+  evalListenReference: string;
+  evalMicInstruction: string;
 
   // Vocab Explorer Modal
   vocabTitle: string;
@@ -155,7 +172,6 @@ export const dictionaries: Record<Locale, Translations> = {
     speedFast: '1.0x 快速',
     stopBtn: '停止',
 
-    // New Tool Header Buttons
     btnSyllableBuilder: '拼音沙盒',
     btnStrokeOrder: '笔顺描红',
     btnVocalTract: '发音口型',
@@ -164,27 +180,35 @@ export const dictionaries: Record<Locale, Translations> = {
     btnVocabExplorer: 'K-Pop/剧词典',
     btnCommuterMode: '随身听模式',
 
-    // Syllable Builder Modal
     builderTitle: '🧩 韩语拼音组合沙盒',
     builderSubtitle: '自由选择 初声(辅音) + 中声(元音) + 终声(收音) 实时合成 Unicode 拼音',
-    builderChoLabel: '1. 选择初声 (Initial Consonant)',
-    builderJungLabel: '2. 选择中声 (Medial Vowels)',
-    builderJongLabel: '3. 选择终声 (Final Batchim / 收音)',
+    builderChoLabel: '1. 选择初声 (初声 / 辅音)',
+    builderJungLabel: '2. 选择中声 (中声 / 元音)',
+    builderJongLabel: '3. 选择终声 (终声 / 收音 - 可选)',
     builderResultLabel: '实时合成 Unicode 拼音 Block:',
+    builderListenSound: '听发音',
+    builderReset: '重置',
+    builderNoBatchim: '无收音 (없음)',
+    builderInitialTag: '初声',
+    builderVowelTag: '中声',
+    builderBatchimTag: '终声',
 
-    // Stroke Order Modal
     strokeTitle: '✍️ 韩语笔顺描红与手写画布',
     strokeSubtitle: '描画任意韩语辅音、元音或组合字，练习标准书写笔顺',
     strokePlaceholder: '输入任意韩字...',
     strokeClearBtn: '清除',
     strokeGuideBtn: '显示笔顺指南',
     strokeHideGuideBtn: '隐藏笔顺指南',
+    strokeDrawHere: '在此处书写描红',
+    strokePronounceBtn: '发音',
 
-    // Vocal Tract Guide Modal
     vocalTitle: '🗣️ 声道剖面与发音口型图解',
     vocalSubtitle: '直观了解舌头位置、气流方向与口型开合要领',
+    vocalDiagramNote: '蓝线表示舌头弯曲弧度与发音接触部位',
+    vocalTrySounds: '试听发音:',
+    vocalTongueLabel: '舌位:',
+    vocalAirflowLabel: '气流:',
 
-    // Typing Game Modal
     typingTitle: '⌨️ 韩语键盘速打游戏',
     typingSubtitle: '练习韩语 두벌식 (2-Set Dubeolsik) 键盘布局与实时拼字',
     typingScore: '得分',
@@ -192,24 +216,25 @@ export const dictionaries: Record<Locale, Translations> = {
     typingReset: '重置',
     typingTargetLabel: '请打出以下目标字词:',
     typingInputPlaceholder: '点击下方虚拟键盘或直接敲击键盘...',
+    typingKeyboardHeader: '두벌식 (2-Set) 虚拟键盘布局 — 先按辅音，后按元音',
+    typingBackspace: '退格 (Backspace)',
 
-    // Pronunciation Evaluator Modal
     evalTitle: '🎙️ AI 麦克风发音跟读评估',
     evalSubtitle: '点击麦克风大声朗读，实时识别并评分',
     evalStartMic: '开始录音识别',
     evalListening: '正在倾听中...',
+    evalTargetLabel: '目标词汇:',
+    evalListenReference: '听示范朗读',
+    evalMicInstruction: '点击麦克风，用韩语大声朗读目标词',
 
-    // Vocab Explorer Modal
     vocabTitle: '💖 K-Pop & 影视韩语词典',
     vocabSubtitle: '探索精选韩剧、K-Pop 浪漫金句与日常高频词汇',
     vocabSearchPlaceholder: '搜索词汇或翻译...',
 
-    // Audio Commuter Modal
     commuterTitle: '🎧 随身听跟读模式 (Commuter Mode)',
     commuterSubtitle: '无需手动点击，自动循环播放并朗读韩语词汇',
     commuterBlindTest: '盲听模式 (隐藏韩字)',
 
-    // Flashcard Modal
     fcTitle: '🎓 韩语发音记忆卡片',
     fcHint: '点击卡片翻面看罗马音 & 听读音',
     fcCho: '声母',
@@ -219,7 +244,6 @@ export const dictionaries: Record<Locale, Translations> = {
     fcNext: '下一个',
     fcShuffle: '打乱顺序',
 
-    // Quiz Modal
     qzTitle: '🎯 听音辨字小测验',
     qzScore: '得分',
     qzStreak: '连胜',
@@ -227,7 +251,6 @@ export const dictionaries: Record<Locale, Translations> = {
     qzCorrect: '回答正确！太棒了！ 🎉',
     qzIncorrect: '正确答案是:',
 
-    // Guide Modal
     guideTitle: '👩‍🏫 教师发音指导与汉语对照表',
     guideSubtitle: '专门面向中文学习者的韩语发音难点解析与口型助记',
     guideSec1Title: '1. 辅音三分法（松音 vs 紧音 vs 送气音）',
@@ -287,10 +310,16 @@ export const dictionaries: Record<Locale, Translations> = {
 
     builderTitle: '🧩 韓語拼音組合沙盒',
     builderSubtitle: '自由選擇 初聲(輔音) + 中聲(母音) + 終聲(收音) 實時合成 Unicode 拼音',
-    builderChoLabel: '1. 選擇初聲 (Initial Consonant)',
-    builderJungLabel: '2. 選擇中聲 (Medial Vowels)',
-    builderJongLabel: '3. 選擇終聲 (Final Batchim / 收音)',
+    builderChoLabel: '1. 選擇初聲 (初聲 / 輔音)',
+    builderJungLabel: '2. 選擇中聲 (中聲 / 母音)',
+    builderJongLabel: '3. 選擇終聲 (終聲 / 收音 - 可選)',
     builderResultLabel: '實時合成 Unicode 拼音 Block:',
+    builderListenSound: '聽發音',
+    builderReset: '重置',
+    builderNoBatchim: '無收音 (없음)',
+    builderInitialTag: '初聲',
+    builderVowelTag: '中聲',
+    builderBatchimTag: '終聲',
 
     strokeTitle: '✍️ 韓語筆順描紅與手寫畫布',
     strokeSubtitle: '描畫任意韓語輔音、母音或組合字，練習標準書寫筆順',
@@ -298,9 +327,15 @@ export const dictionaries: Record<Locale, Translations> = {
     strokeClearBtn: '清除',
     strokeGuideBtn: '顯示筆順指南',
     strokeHideGuideBtn: '隱藏筆順指南',
+    strokeDrawHere: '在此處書寫描紅',
+    strokePronounceBtn: '發音',
 
     vocalTitle: '🗣️ 聲道剖面與發音口型圖解',
     vocalSubtitle: '直觀了解舌頭位置、氣流方向與口型開合要領',
+    vocalDiagramNote: '藍線表示舌頭彎曲弧度與發音接觸部位',
+    vocalTrySounds: '試聽發音:',
+    vocalTongueLabel: '舌位:',
+    vocalAirflowLabel: '氣流:',
 
     typingTitle: '⌨️ 韓語鍵盤速打遊戲',
     typingSubtitle: '練習韓語 두벌식 (2-Set Dubeolsik) 鍵盤佈局與實時拼字',
@@ -309,11 +344,16 @@ export const dictionaries: Record<Locale, Translations> = {
     typingReset: '重置',
     typingTargetLabel: '請打出以下目標字詞:',
     typingInputPlaceholder: '點擊下方虛擬鍵盤或直接敲擊鍵盤...',
+    typingKeyboardHeader: '두벌식 (2-Set) 虛擬鍵盤佈局 — 先按輔音，後按母音',
+    typingBackspace: '退格 (Backspace)',
 
     evalTitle: '🎙️ AI 麥克風發音跟讀評估',
     evalSubtitle: '點擊麥克風大聲朗讀，實時識別並評分',
     evalStartMic: '開始錄音識別',
     evalListening: '正在傾聽中...',
+    evalTargetLabel: '目標詞彙:',
+    evalListenReference: '聽示範朗讀',
+    evalMicInstruction: '點擊麥克風，用韓語大聲朗讀目標詞',
 
     vocabTitle: '💖 K-Pop & 影視韓語詞典',
     vocabSubtitle: '探索精選韓劇、K-Pop 浪漫金句與日常高頻詞彙',
@@ -402,6 +442,12 @@ export const dictionaries: Record<Locale, Translations> = {
     builderJungLabel: '2. Medial Vowel (Medial)',
     builderJongLabel: '3. Final Consonant (Batchim)',
     builderResultLabel: 'Composed Unicode Syllable:',
+    builderListenSound: 'Listen Sound',
+    builderReset: 'Reset',
+    builderNoBatchim: 'None (없음)',
+    builderInitialTag: 'Initial',
+    builderVowelTag: 'Vowel',
+    builderBatchimTag: 'Batchim',
 
     strokeTitle: '✍️ Interactive Stroke-Order Canvas',
     strokeSubtitle: 'Trace any consonant, vowel, or composed Hangul character',
@@ -409,9 +455,15 @@ export const dictionaries: Record<Locale, Translations> = {
     strokeClearBtn: 'Clear',
     strokeGuideBtn: 'Show Guide',
     strokeHideGuideBtn: 'Hide Guide',
+    strokeDrawHere: 'Draw here',
+    strokePronounceBtn: 'Pronounce',
 
     vocalTitle: '🗣️ Vocal Tract & Tongue Guide',
     vocalSubtitle: 'Anatomical mouth position diagrams and airflow guide',
+    vocalDiagramNote: 'Blue line indicates tongue curve & contact zone',
+    vocalTrySounds: 'Try Sounds:',
+    vocalTongueLabel: 'Tongue:',
+    vocalAirflowLabel: 'Airflow:',
 
     typingTitle: '⌨️ Hangul Speed Typist Game',
     typingSubtitle: 'Practice typing with 2-Set Dubeolsik keyboard layout',
@@ -420,11 +472,16 @@ export const dictionaries: Record<Locale, Translations> = {
     typingReset: 'Reset',
     typingTargetLabel: 'Type This Character:',
     typingInputPlaceholder: 'Tap virtual keys below or type on keyboard...',
+    typingKeyboardHeader: '2-SET (두벌식) VIRTUAL KEYBOARD LAYOUT — TAP CONSONANT THEN VOWEL',
+    typingBackspace: 'Backspace',
 
     evalTitle: '🎙️ Pronunciation Evaluator',
     evalSubtitle: 'Speak into your mic for real-time speech recognition scoring',
     evalStartMic: 'Start Recording',
     evalListening: 'Listening...',
+    evalTargetLabel: 'Target:',
+    evalListenReference: 'Listen Reference Pronunciation',
+    evalMicInstruction: 'Tap mic & speak target word in Korean',
 
     vocabTitle: '💖 K-Pop & K-Drama Vocabulary Explorer',
     vocabSubtitle: 'Explore curated K-Pop & K-Drama words with dynamic syllable breakdowns',

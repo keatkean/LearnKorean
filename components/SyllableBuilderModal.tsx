@@ -67,13 +67,13 @@ export const SyllableBuilderModal: React.FC<SyllableBuilderModalProps> = ({
           </div>
 
           <div className="flex items-center gap-2 text-xs font-semibold text-slate-600 dark:text-slate-300 bg-white/80 dark:bg-slate-900/80 px-4 py-1.5 rounded-full shadow-sm">
-            <span>{initial} (Initial)</span>
+            <span>{initial} ({t.builderInitialTag})</span>
             <Plus className="w-3 h-3 text-slate-400" />
-            <span>{medial} (Vowel)</span>
+            <span>{medial} ({t.builderVowelTag})</span>
             {final && (
               <>
                 <Plus className="w-3 h-3 text-slate-400" />
-                <span>{final} (Batchim)</span>
+                <span>{final} ({t.builderBatchimTag})</span>
               </>
             )}
           </div>
@@ -84,14 +84,14 @@ export const SyllableBuilderModal: React.FC<SyllableBuilderModalProps> = ({
               className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium text-sm px-5 py-2.5 rounded-xl shadow-md hover:shadow-indigo-500/20 active:scale-95 transition-all"
             >
               <Volume2 className="w-4 h-4" />
-              <span>Listen Sound</span>
+              <span>{t.builderListenSound}</span>
             </button>
             <button
               onClick={handleReset}
               className="flex items-center gap-1.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-sm px-3.5 py-2.5 rounded-xl hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
             >
               <RefreshCw className="w-4 h-4" />
-              <span>Reset</span>
+              <span>{t.builderReset}</span>
             </button>
           </div>
         </div>
@@ -101,7 +101,7 @@ export const SyllableBuilderModal: React.FC<SyllableBuilderModalProps> = ({
           {/* Initial Consonants */}
           <div>
             <h3 className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">
-              1. Initial Consonant (초성)
+              {t.builderChoLabel}
             </h3>
             <div className="flex flex-wrap gap-1.5 max-h-32 overflow-y-auto p-1">
               {INITIAL_CONSONANTS.map((c) => (
@@ -123,7 +123,7 @@ export const SyllableBuilderModal: React.FC<SyllableBuilderModalProps> = ({
           {/* Medial Vowels */}
           <div>
             <h3 className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">
-              2. Medial Vowel (중성)
+              {t.builderJungLabel}
             </h3>
             <div className="flex flex-wrap gap-1.5 max-h-32 overflow-y-auto p-1">
               {MEDIAL_VOWELS.map((v) => (
@@ -145,7 +145,7 @@ export const SyllableBuilderModal: React.FC<SyllableBuilderModalProps> = ({
           {/* Final Consonants (Batchim) */}
           <div>
             <h3 className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">
-              3. Final Consonant / Batchim (종성 - Optional)
+              {t.builderJongLabel}
             </h3>
             <div className="flex flex-wrap gap-1.5 max-h-32 overflow-y-auto p-1">
               <button
@@ -156,7 +156,7 @@ export const SyllableBuilderModal: React.FC<SyllableBuilderModalProps> = ({
                     : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-indigo-50 dark:hover:bg-indigo-950'
                 }`}
               >
-                None (없음)
+                {t.builderNoBatchim}
               </button>
               {FINAL_CONSONANTS.filter(f => f !== '').map((f) => (
                 <button

@@ -194,7 +194,7 @@ export const StrokeOrderCanvasModal: React.FC<StrokeOrderCanvasModalProps> = ({
               className="flex items-center gap-1.5 text-xs text-indigo-600 dark:text-indigo-400 font-semibold bg-indigo-50 dark:bg-indigo-950/60 px-3 py-1.5 rounded-lg hover:bg-indigo-100 transition-colors"
             >
               <Volume2 className="w-3.5 h-3.5" />
-              <span>Pronounce "{activeCharacter}"</span>
+              <span>{t.strokePronounceBtn} "{activeCharacter}"</span>
             </button>
           </div>
 
@@ -213,7 +213,7 @@ export const StrokeOrderCanvasModal: React.FC<StrokeOrderCanvasModalProps> = ({
                 className="w-full h-full cursor-crosshair"
               />
               <div className="absolute top-2 left-2 text-[10px] font-medium text-slate-400 pointer-events-none">
-                Draw here
+                {t.strokeDrawHere}
               </div>
             </div>
 
@@ -223,14 +223,14 @@ export const StrokeOrderCanvasModal: React.FC<StrokeOrderCanvasModalProps> = ({
                 className="flex items-center gap-1.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs px-3.5 py-2 rounded-xl hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
               >
                 <Trash2 className="w-3.5 h-3.5" />
-                <span>Clear</span>
+                <span>{t.strokeClearBtn}</span>
               </button>
               <button
                 onClick={() => setShowDemo(!showDemo)}
                 className="flex items-center gap-1.5 bg-indigo-600 text-white text-xs px-3.5 py-2 rounded-xl hover:bg-indigo-700 shadow-sm transition-colors"
               >
                 <Play className="w-3.5 h-3.5" />
-                <span>{showDemo ? 'Hide Guide' : 'Show Guide'}</span>
+                <span>{showDemo ? t.strokeHideGuideBtn : t.strokeGuideBtn}</span>
               </button>
             </div>
           </div>

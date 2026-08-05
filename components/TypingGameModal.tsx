@@ -199,7 +199,7 @@ export const TypingGameModal: React.FC<TypingGameModalProps> = ({
         {/* Virtual Keyboard Visualizer */}
         <div className="flex flex-col gap-1.5 bg-slate-100 dark:bg-slate-800/80 p-3 rounded-2xl">
           <div className="text-[10px] font-semibold text-slate-400 uppercase text-center mb-1">
-            2-Set (두벌식) Virtual Keyboard Layout — Tap Consonant then Vowel
+            {t.typingKeyboardHeader}
           </div>
           {VIRTUAL_KEYBOARD_LAYOUT.map((row, rIdx) => (
             <div key={rIdx} className="flex justify-center gap-1">
@@ -230,7 +230,7 @@ export const TypingGameModal: React.FC<TypingGameModalProps> = ({
               className="flex items-center gap-1 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 px-4 py-2 rounded-lg text-xs font-bold hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors"
             >
               <Delete className="w-4 h-4" />
-              <span>Backspace</span>
+              <span>{t.typingBackspace}</span>
             </button>
           </div>
         </div>

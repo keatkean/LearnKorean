@@ -183,6 +183,7 @@ export default function Home() {
         isOpen={isVocalTractOpen}
         onClose={() => setIsVocalTractOpen(false)}
         onSpeak={(text) => speak(text)}
+        locale={locale}
         t={t}
       />
 

@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useSpeechRecognition } from '@/lib/useSpeechRecognition';
-import { Mic, MicOff, Volume2, Award, AlertCircle, X, Sparkles } from 'lucide-react';
+import { Mic, MicOff, Volume2, AlertCircle, Award, Sparkles, X } from 'lucide-react';
 import { Translations } from '@/lib/i18n';
 
 interface PronunciationEvaluatorModalProps {
@@ -25,8 +25,8 @@ export const PronunciationEvaluatorModal: React.FC<PronunciationEvaluatorModalPr
     isListening,
     transcript,
     confidence,
-    error,
     isSupported,
+    error,
     startListening,
     stopListening,
     resetTranscript,
@@ -34,11 +34,11 @@ export const PronunciationEvaluatorModal: React.FC<PronunciationEvaluatorModalPr
 
   if (!isOpen) return null;
 
-  const isMatch = transcript.trim() === currentTarget;
+  const isMatch = transcript.trim() === currentTarget.trim() || transcript.includes(currentTarget);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in">
-      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl p-4 sm:p-6 flex flex-col gap-6">
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-2xl p-4 sm:p-6 flex flex-col gap-6">
 
         {/* Header */}
         <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
@@ -66,7 +66,7 @@ export const PronunciationEvaluatorModal: React.FC<PronunciationEvaluatorModalPr
 
         {/* Target Words Selector */}
         <div className="flex items-center gap-2 overflow-x-auto pb-1">
-          <span className="text-xs font-semibold text-slate-500 whitespace-nowrap">Target:</span>
+          <span className="text-xs font-semibold text-slate-500 whitespace-nowrap">{t.evalTargetLabel}</span>
           {SAMPLE_TARGETS.map((target) => (
             <button
               key={target}
@@ -96,7 +96,7 @@ export const PronunciationEvaluatorModal: React.FC<PronunciationEvaluatorModalPr
             className="flex items-center gap-1.5 bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 text-xs font-bold px-4 py-2 rounded-xl shadow-sm border border-indigo-100 dark:border-indigo-900 hover:bg-indigo-50 transition-colors"
           >
             <Volume2 className="w-4 h-4" />
-            <span>Listen Reference Pronunciation</span>
+            <span>{t.evalListenReference}</span>
           </button>
         </div>
 
@@ -123,9 +123,9 @@ export const PronunciationEvaluatorModal: React.FC<PronunciationEvaluatorModalPr
               {isListening ? <MicOff className="w-8 h-8" /> : <Mic className="w-8 h-8" />}
             </button>
 
-            <div className="text-xs font-semibold text-slate-500">
-              {isListening ? 'Listening... Speak now!' : 'Tap mic & speak target word in Korean'}
-            </div>
+            <span className="text-xs font-medium text-slate-500">
+              {isListening ? t.evalListening : t.evalMicInstruction}
+            </span>
 
             {/* Results Feedback Panel */}
             {transcript && (
