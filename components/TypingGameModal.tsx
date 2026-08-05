@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { VIRTUAL_KEYBOARD_LAYOUT, DUBEOLSIK_MAP, mapKeyToHangul } from '@/lib/dubeolsikMap';
-import { Keyboard, Trophy, RotateCcw, X, Volume2, Flame } from 'lucide-react';
+import { composeHangul, INITIAL_CONSONANTS, MEDIAL_VOWELS, FINAL_CONSONANTS } from '@/lib/hangulComposer';
+import { Keyboard, Trophy, RotateCcw, X, Flame, Delete } from 'lucide-react';
 import { Translations } from '@/lib/i18n';
 
 interface TypingGameModalProps {
@@ -14,6 +15,21 @@ interface TypingGameModalProps {
 
 const SAMPLE_WORDS = ['가', '나', '다', '라', '마', '바', '사', '아', '자', '차', '카', '타', '파', '하', '고', '노', '도', '로', '모', '보', '소', '오', '조', '초'];
 
+function composeJamoArray(jamos: string[]): string {
+  if (jamos.length === 0) return '';
+  if (jamos.length === 1) return jamos[0];
+
+  const firstIsConsonant = INITIAL_CONSONANTS.includes(jamos[0] as any);
+  const secondIsVowel = MEDIAL_VOWELS.includes(jamos[1] as any);
+
+  if (firstIsConsonant && secondIsVowel) {
+    const thirdIsFinal = jamos.length >= 3 && FINAL_CONSONANTS.includes(jamos[2] as any);
+    return composeHangul(jamos[0], jamos[1], thirdIsFinal ? jamos[2] : '');
+  }
+
+  return jamos.join('');
+}
+
 export const TypingGameModal: React.FC<TypingGameModalProps> = ({
   isOpen,
   onClose,
@@ -21,7 +37,7 @@ export const TypingGameModal: React.FC<TypingGameModalProps> = ({
   t,
 }) => {
   const [targetWord, setTargetWord] = useState<string>('가');
-  const [userInput, setUserInput] = useState<string>('');
+  const [jamoBuffer, setJamoBuffer] = useState<string[]>([]);
   const [score, setScore] = useState<number>(0);
   const [highScore, setHighScore] = useState<number>(0);
   const [pressedKey, setPressedKey] = useState<string | null>(null);
@@ -43,54 +59,60 @@ export const TypingGameModal: React.FC<TypingGameModalProps> = ({
 
   if (!isOpen) return null;
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = e.target.value;
-    setUserInput(val);
+  const currentComposedText = composeJamoArray(jamoBuffer);
 
-    if (val === targetWord) {
-      onSpeak(targetWord);
-      const newScore = score + 10;
-      setScore(newScore);
-      if (newScore > highScore) {
-        setHighScore(newScore);
-        if (typeof window !== 'undefined') {
-          localStorage.setItem('learn_korean_typing_highscore', newScore.toString());
-        }
+  const handleMatchSuccess = (matchedText: string) => {
+    onSpeak(matchedText);
+    const newScore = score + 10;
+    setScore(newScore);
+    if (newScore > highScore) {
+      setHighScore(newScore);
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('learn_korean_typing_highscore', newScore.toString());
       }
-      setUserInput('');
-      const nextWord = SAMPLE_WORDS[Math.floor(Math.random() * SAMPLE_WORDS.length)];
-      setTargetWord(nextWord);
+    }
+    setJamoBuffer([]);
+    const nextWord = SAMPLE_WORDS[Math.floor(Math.random() * SAMPLE_WORDS.length)];
+    setTargetWord(nextWord);
+  };
+
+  const handleVirtualKeyPress = (hangulJamo: string) => {
+    onSpeak(hangulJamo);
+    const updatedBuffer = [...jamoBuffer, hangulJamo];
+    const composed = composeJamoArray(updatedBuffer);
+
+    if (composed === targetWord) {
+      handleMatchSuccess(targetWord);
+    } else {
+      setJamoBuffer(updatedBuffer);
     }
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    setPressedKey(e.key.toLowerCase());
-    setTimeout(() => setPressedKey(null), 200);
+  const handleBackspace = () => {
+    setJamoBuffer((prev) => prev.slice(0, -1));
   };
 
-  const handleVirtualKeyPress = (hangulChar: string) => {
-    onSpeak(hangulChar);
-    setUserInput(hangulChar);
-    if (hangulChar === targetWord) {
-      const newScore = score + 10;
-      setScore(newScore);
-      if (newScore > highScore) {
-        setHighScore(newScore);
-        if (typeof window !== 'undefined') {
-          localStorage.setItem('learn_korean_typing_highscore', newScore.toString());
-        }
-      }
-      setTimeout(() => {
-        setUserInput('');
-        const nextWord = SAMPLE_WORDS[Math.floor(Math.random() * SAMPLE_WORDS.length)];
-        setTargetWord(nextWord);
-      }, 300);
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const key = e.key;
+    setPressedKey(key.toLowerCase());
+    setTimeout(() => setPressedKey(null), 200);
+
+    if (key === 'Backspace') {
+      handleBackspace();
+      return;
+    }
+
+    // Direct QWERTY key mapping to Korean Dubeolsik Jamos
+    const mappedHangul = mapKeyToHangul(key);
+    if (mappedHangul) {
+      e.preventDefault();
+      handleVirtualKeyPress(mappedHangul);
     }
   };
 
   const handleResetGame = () => {
     setScore(0);
-    setUserInput('');
+    setJamoBuffer([]);
     setTargetWord(SAMPLE_WORDS[0]);
   };
 
@@ -150,21 +172,32 @@ export const TypingGameModal: React.FC<TypingGameModalProps> = ({
             {targetWord}
           </div>
 
-          <input
-            ref={inputRef}
-            type="text"
-            value={userInput}
-            onChange={handleInputChange}
-            onKeyDown={handleKeyDown}
-            placeholder="Type or tap key below..."
-            className="w-48 text-center text-xl font-bold bg-white dark:bg-slate-900 border-2 border-indigo-300 dark:border-indigo-700 rounded-xl px-4 py-2 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-inner"
-          />
+          <div className="relative flex items-center">
+            <input
+              ref={inputRef}
+              type="text"
+              readOnly
+              value={currentComposedText}
+              onKeyDown={handleKeyDown}
+              placeholder="Tap virtual keys below..."
+              className="w-56 text-center text-2xl font-bold bg-white dark:bg-slate-900 border-2 border-indigo-300 dark:border-indigo-700 rounded-xl px-4 py-2 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-inner"
+            />
+            {jamoBuffer.length > 0 && (
+              <button
+                onClick={handleBackspace}
+                className="absolute right-2 p-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+                title="Backspace"
+              >
+                <Delete className="w-5 h-5" />
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Virtual Keyboard Visualizer */}
         <div className="flex flex-col gap-1.5 bg-slate-100 dark:bg-slate-800/80 p-3 rounded-2xl">
           <div className="text-[10px] font-semibold text-slate-400 uppercase text-center mb-1">
-            2-Set (두벌식) Virtual Keyboard Layout
+            2-Set (두벌식) Virtual Keyboard Layout — Tap Consonant then Vowel
           </div>
           {VIRTUAL_KEYBOARD_LAYOUT.map((row, rIdx) => (
             <div key={rIdx} className="flex justify-center gap-1">
@@ -187,6 +220,17 @@ export const TypingGameModal: React.FC<TypingGameModalProps> = ({
               })}
             </div>
           ))}
+
+          {/* Bottom Control Row */}
+          <div className="flex justify-center mt-1">
+            <button
+              onClick={handleBackspace}
+              className="flex items-center gap-1 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 px-4 py-2 rounded-lg text-xs font-bold hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors"
+            >
+              <Delete className="w-4 h-4" />
+              <span>Backspace</span>
+            </button>
+          </div>
         </div>
 
       </div>
