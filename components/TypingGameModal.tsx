@@ -13,7 +13,16 @@ interface TypingGameModalProps {
   t: Translations;
 }
 
-const SAMPLE_WORDS = ['가', '나', '다', '라', '마', '바', '사', '아', '자', '차', '카', '타', '파', '하', '고', '노', '도', '로', '모', '보', '소', '오', '조', '초'];
+const SAMPLE_WORDS = [
+  '가', '나', '다', '라', '마', '바', '사', '아', '자', '차', '카', '타', '파', '하',
+  '고', '노', '도', '로', '모', '보', '소', '오', '조', '초',
+  '구', '누', '두', '루', '무', '부', '수', '우', '주', '추',
+  '사랑', '대박', '오빠', '친구', '행복', '안녕', '감사'
+];
+
+function getRandomWord(): string {
+  return SAMPLE_WORDS[Math.floor(Math.random() * SAMPLE_WORDS.length)];
+}
 
 export const TypingGameModal: React.FC<TypingGameModalProps> = ({
   isOpen,
@@ -36,8 +45,12 @@ export const TypingGameModal: React.FC<TypingGameModalProps> = ({
     }
   }, []);
 
+  // Randomize target word every time modal opens
   useEffect(() => {
     if (isOpen) {
+      setScore(0);
+      setJamoBuffer([]);
+      setTargetWord(getRandomWord());
       setTimeout(() => inputRef.current?.focus(), 100);
     }
   }, [isOpen]);
@@ -57,7 +70,12 @@ export const TypingGameModal: React.FC<TypingGameModalProps> = ({
       }
     }
     setJamoBuffer([]);
-    const nextWord = SAMPLE_WORDS[Math.floor(Math.random() * SAMPLE_WORDS.length)];
+
+    // Pick new random word different from current target
+    let nextWord = getRandomWord();
+    while (nextWord === matchedText && SAMPLE_WORDS.length > 1) {
+      nextWord = getRandomWord();
+    }
     setTargetWord(nextWord);
   };
 
@@ -87,7 +105,6 @@ export const TypingGameModal: React.FC<TypingGameModalProps> = ({
       return;
     }
 
-    // Direct QWERTY key mapping to Korean Dubeolsik Jamos
     const mappedHangul = mapKeyToHangul(key);
     if (mappedHangul) {
       e.preventDefault();
@@ -98,7 +115,7 @@ export const TypingGameModal: React.FC<TypingGameModalProps> = ({
   const handleResetGame = () => {
     setScore(0);
     setJamoBuffer([]);
-    setTargetWord(SAMPLE_WORDS[0]);
+    setTargetWord(getRandomWord());
   };
 
   return (
