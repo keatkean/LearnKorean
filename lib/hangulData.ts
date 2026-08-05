@@ -1,5 +1,6 @@
 export interface Consonant {
   char: string;
+  name: string; // e.g. "기역", "니은", "디귿"
   rom: string;
   choIdx: number;
   missing: boolean;
@@ -29,28 +30,28 @@ export interface Syllable {
 export type ViewMode = 'basic' | 'tense' | 'complex' | 'full';
 
 // 14 Basic Consonants + 5 Tense Consonants = 19 Total
-// Standard Revised Romanization (RR) & Official Chinese Teaching Standards
+// Standard Revised Romanization (RR) & Official Chinese/Korean Teaching Standards
 export const CHOSEONG: Consonant[] = [
-  { char: 'ㄱ', rom: 'g', choIdx: 0, missing: false, type: 'plain', typeName: '松音', pinyinHint: '词首似 k, 词中似 g' },
-  { char: 'ㄴ', rom: 'n', choIdx: 2, missing: false, type: 'sonorant', typeName: '响音/鼻音', pinyinHint: '似拼音 n' },
-  { char: 'ㄷ', rom: 'd', choIdx: 3, missing: false, type: 'plain', typeName: '松音', pinyinHint: '词首似 t, 词中似 d' },
-  { char: 'ㄹ', rom: 'r/l', choIdx: 5, missing: false, type: 'sonorant', typeName: '响音/边音', pinyinHint: '词首弹舌 r, 韵尾 l' },
-  { char: 'ㅁ', rom: 'm', choIdx: 6, missing: false, type: 'sonorant', typeName: '响音/鼻音', pinyinHint: '似拼音 m' },
-  { char: 'ㅂ', rom: 'b', choIdx: 7, missing: false, type: 'plain', typeName: '松音', pinyinHint: '词首似 p, 词中似 b' },
-  { char: 'ㅅ', rom: 's', choIdx: 9, missing: false, type: 'plain', typeName: '松音', pinyinHint: '似拼音 s' },
-  { char: 'ㅇ', rom: '', choIdx: 11, missing: false, type: 'sonorant', typeName: '不发音', pinyinHint: '作初声时不发音' },
-  { char: 'ㅈ', rom: 'j', choIdx: 12, missing: false, type: 'plain', typeName: '松音', pinyinHint: '似拼音 j / z' },
-  { char: 'ㅊ', rom: 'ch', choIdx: 14, missing: false, type: 'aspirated', typeName: '送气音', pinyinHint: '似拼音 q / ch (强烈强气)' },
-  { char: 'ㅋ', rom: 'k', choIdx: 15, missing: false, type: 'aspirated', typeName: '送气音', pinyinHint: '似拼音 k (强烈喷气)' },
-  { char: 'ㅌ', rom: 't', choIdx: 16, missing: false, type: 'aspirated', typeName: '送气音', pinyinHint: '似拼音 t (强烈喷气)' },
-  { char: 'ㅍ', rom: 'p', choIdx: 17, missing: false, type: 'aspirated', typeName: '送气音', pinyinHint: '似拼音 p (强烈喷气)' },
-  { char: 'ㅎ', rom: 'h', choIdx: 18, missing: false, type: 'aspirated', typeName: '送气音', pinyinHint: '似拼音 h' },
+  { char: 'ㄱ', name: '기역', rom: 'g', choIdx: 0, missing: false, type: 'plain', typeName: '松音', pinyinHint: '词首似 k, 词中似 g' },
+  { char: 'ㄴ', name: '니은', rom: 'n', choIdx: 2, missing: false, type: 'sonorant', typeName: '响音/鼻音', pinyinHint: '似拼音 n' },
+  { char: 'ㄷ', name: '디귿', rom: 'd', choIdx: 3, missing: false, type: 'plain', typeName: '松音', pinyinHint: '词首似 t, 词中似 d' },
+  { char: 'ㄹ', name: '리을', rom: 'r/l', choIdx: 5, missing: false, type: 'sonorant', typeName: '响音/边音', pinyinHint: '词首弹舌 r, 韵尾 l' },
+  { char: 'ㅁ', name: '미음', rom: 'm', choIdx: 6, missing: false, type: 'sonorant', typeName: '响音/鼻音', pinyinHint: '似拼音 m' },
+  { char: 'ㅂ', name: '비읍', rom: 'b', choIdx: 7, missing: false, type: 'plain', typeName: '松音', pinyinHint: '词首似 p, 词中似 b' },
+  { char: 'ㅅ', name: '시옷', rom: 's', choIdx: 9, missing: false, type: 'plain', typeName: '松音', pinyinHint: '似拼音 s' },
+  { char: 'ㅇ', name: '이응', rom: '', choIdx: 11, missing: false, type: 'sonorant', typeName: '不发音', pinyinHint: '作初声时不发音' },
+  { char: 'ㅈ', name: '지읒', rom: 'j', choIdx: 12, missing: false, type: 'plain', typeName: '松音', pinyinHint: '似拼音 j / z' },
+  { char: 'ㅊ', name: '치읓', rom: 'ch', choIdx: 14, missing: false, type: 'aspirated', typeName: '送气音', pinyinHint: '似拼音 q / ch (强烈强气)' },
+  { char: 'ㅋ', name: '키읔', rom: 'k', choIdx: 15, missing: false, type: 'aspirated', typeName: '送气音', pinyinHint: '似拼音 k (强烈喷气)' },
+  { char: 'ㅌ', name: '티읕', rom: 't', choIdx: 16, missing: false, type: 'aspirated', typeName: '送气音', pinyinHint: '似拼音 t (强烈喷气)' },
+  { char: 'ㅍ', name: '피읖', rom: 'p', choIdx: 17, missing: false, type: 'aspirated', typeName: '送气音', pinyinHint: '似拼音 p (强烈喷气)' },
+  { char: 'ㅎ', name: '히읗', rom: 'h', choIdx: 18, missing: false, type: 'aspirated', typeName: '送气音', pinyinHint: '似拼音 h' },
   // 5 Tense Consonants (Double Consonants)
-  { char: 'ㄲ', rom: 'gg', choIdx: 1, missing: true, type: 'tense', typeName: '紧音/双辅音', pinyinHint: '喉部紧绷，不送气 k' },
-  { char: 'ㄸ', rom: 'dd', choIdx: 4, missing: true, type: 'tense', typeName: '紧音/双辅音', pinyinHint: '喉部紧绷，不送气 t' },
-  { char: 'ㅃ', rom: 'bb', choIdx: 8, missing: true, type: 'tense', typeName: '紧音/双辅音', pinyinHint: '喉部紧绷，不送气 p' },
-  { char: 'ㅆ', rom: 'ss', choIdx: 10, missing: true, type: 'tense', typeName: '紧音/双辅音', pinyinHint: '喉部紧绷，强擦音 s' },
-  { char: 'ㅉ', rom: 'jj', choIdx: 13, missing: true, type: 'tense', typeName: '紧音/双辅音', pinyinHint: '喉部紧绷，不送气 j' }
+  { char: 'ㄲ', name: '쌍기역', rom: 'gg', choIdx: 1, missing: true, type: 'tense', typeName: '紧音/双辅音', pinyinHint: '喉部紧绷，不送气 k' },
+  { char: 'ㄸ', name: '쌍디귿', rom: 'dd', choIdx: 4, missing: true, type: 'tense', typeName: '紧音/双辅音', pinyinHint: '喉部紧绷，不送气 t' },
+  { char: 'ㅃ', name: '쌍비읍', rom: 'bb', choIdx: 8, missing: true, type: 'tense', typeName: '紧音/双辅音', pinyinHint: '喉部紧绷，不送气 p' },
+  { char: 'ㅆ', name: '쌍시옷', rom: 'ss', choIdx: 10, missing: true, type: 'tense', typeName: '紧音/双辅音', pinyinHint: '喉部紧绷，强擦音 s' },
+  { char: 'ㅉ', name: '쌍지읒', rom: 'jj', choIdx: 13, missing: true, type: 'tense', typeName: '紧音/双辅音', pinyinHint: '喉部紧绷，不送气 j' }
 ];
 
 // 10 Basic Vowels + 11 Complex Vowels = 21 Total
@@ -80,18 +81,11 @@ export const JUNGSEONG: Vowel[] = [
   { char: 'ㅢ', rom: 'ui', jungIdx: 19, missing: true, type: 'complex', typeName: '复元音', pinyinHint: 'ㅡ + ㅣ，读 ui / i' }
 ];
 
-/**
- * Computes combined Hangul Unicode block character from initial consonant and vowel index.
- * Formula: 0xAC00 + (choIdx * 588) + (jungIdx * 28)
- */
 export function getSyllableChar(choIdx: number, jungIdx: number): string {
   const unicode = 0xac00 + choIdx * 588 + jungIdx * 28;
   return String.fromCharCode(unicode);
 }
 
-/**
- * Returns filtered lists of consonants and vowels based on selected view mode
- */
 export function getFilteredMatrix(mode: ViewMode): { consonants: Consonant[]; vowels: Vowel[] } {
   const basicConsonants = CHOSEONG.filter((c) => !c.missing);
   const tenseConsonants = CHOSEONG.filter((c) => c.missing);
@@ -110,9 +104,6 @@ export function getFilteredMatrix(mode: ViewMode): { consonants: Consonant[]; vo
   }
 }
 
-/**
- * Generates flat array of all valid syllables for flashcards or quiz modes
- */
 export function getAllSyllableList(): Syllable[] {
   const list: Syllable[] = [];
   CHOSEONG.forEach((c) => {

@@ -69,9 +69,9 @@ export const HangulTable: React.FC<HangulTableProps> = ({
                   romaja={c.rom}
                   isMissing={c.missing}
                   missingTag={c.missing ? t.consonantTag : undefined}
-                  isPlaying={activeText === getSyllableChar(c.choIdx, 0)}
+                  isPlaying={activeText === c.name}
                   isHighlighted={isMatch(c.char, c.rom)}
-                  onClick={() => onSpeak(getSyllableChar(c.choIdx, 0))}
+                  onClick={() => onSpeak(c.name)}
                   isHeader
                   type="consonant"
                 />

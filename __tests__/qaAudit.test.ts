@@ -16,7 +16,10 @@ function assertEqual(actual: any, expected: any, testName: string) {
 export function runQAAuditTests() {
   console.log('\n--- Running Senior QA & Bug Prevention Audit Tests ---');
 
-  // Test 1: Consonant Pronunciation Syllable Composition (Fixing raw jamo concatenation bug)
+  // Test 1: Consonant Pronunciation & Distinct Letter Names (Fixing duplicate header audio bug)
+  assertEqual(CHOSEONG[0].name, '기역', 'ㄱ header name = "기역" (Pronounces Giyeok, distinct from syllable "가")');
+  assertEqual(CHOSEONG[2].name, '디귿', 'ㄷ header name = "디귿" (Pronounces Digeut, distinct from syllable "다")');
+
   const giyeokSyllable = getSyllableChar(0, 0); // ㄱ + ㅏ
   assertEqual(giyeokSyllable, '가', 'giyeok + a = "가" (Valid Unicode syllable, not un-composed "ㄱㅏ")');
 
