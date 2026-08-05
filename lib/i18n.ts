@@ -101,6 +101,10 @@ export interface Translations {
   commuterTitle: string;
   commuterSubtitle: string;
   commuterBlindTest: string;
+  commuterTrackCount: string;
+  commuterBlindTestActive: string;
+  commuterHideText: string;
+  commuterBlindHint: string;
 
   // Flashcard Modal
   fcTitle: string;
@@ -234,6 +238,10 @@ export const dictionaries: Record<Locale, Translations> = {
     commuterTitle: '🎧 随身听跟读模式 (Commuter Mode)',
     commuterSubtitle: '无需手动点击，自动循环播放并朗读韩语词汇',
     commuterBlindTest: '盲听模式 (隐藏韩字)',
+    commuterTrackCount: '音轨',
+    commuterBlindTestActive: '盲听测试中',
+    commuterHideText: '隐藏韩字',
+    commuterBlindHint: '盲听跟读测试 (点击眼睛图标取消隐藏)',
 
     fcTitle: '🎓 韩语发音记忆卡片',
     fcHint: '点击卡片翻面看罗马音 & 听读音',
@@ -362,6 +370,10 @@ export const dictionaries: Record<Locale, Translations> = {
     commuterTitle: '🎧 隨身聽跟讀模式 (Commuter Mode)',
     commuterSubtitle: '無需手動點擊，自動循環播放並朗讀韓語詞彙',
     commuterBlindTest: '盲聽模式 (隱藏韓字)',
+    commuterTrackCount: '音軌',
+    commuterBlindTestActive: '盲聽測試中',
+    commuterHideText: '隱藏韓字',
+    commuterBlindHint: '盲聽跟讀測試 (點擊眼睛圖標取消隱藏)',
 
     fcTitle: '🎓 韓語發音記憶卡片',
     fcHint: '點擊卡片翻面看羅馬拼音 & 聽讀音',
@@ -490,6 +502,10 @@ export const dictionaries: Record<Locale, Translations> = {
     commuterTitle: '🎧 Hands-Free Audio Commuter Mode',
     commuterSubtitle: 'Hands-free audio player for on-the-go learning',
     commuterBlindTest: 'Audio Blind Test (Hide Text)',
+    commuterTrackCount: 'Track',
+    commuterBlindTestActive: 'Blind Test Active',
+    commuterHideText: 'Hide Text',
+    commuterBlindHint: 'Audio Blind Test (Tap eye to reveal)',
 
     fcTitle: '🎓 Hangul Flashcards',
     fcHint: 'Click card to flip for Romaja & Audio',

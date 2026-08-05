@@ -2,38 +2,110 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { Play, Pause, SkipForward, Headphones, X, Eye, EyeOff, RotateCcw } from 'lucide-react';
-import { Translations } from '@/lib/i18n';
+import { Translations, Locale } from '@/lib/i18n';
 
 interface AudioCommuterModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSpeak: (text: string) => void;
+  locale: Locale;
   t: Translations;
 }
 
 const COMMUTER_DRILL_ITEMS = [
-  { hangul: '가', label: 'Giyeok + A (가)' },
-  { hangul: '나', label: 'Nieun + A (나)' },
-  { hangul: '다', label: 'Digeut + A (다)' },
-  { hangul: '라', label: 'Rieul + A (라)' },
-  { hangul: '마', label: 'Mieum + A (마)' },
-  { hangul: '바', label: 'Bieup + A (바)' },
-  { hangul: '사', label: 'Siot + A (사)' },
-  { hangul: '아', label: 'Ieung + A (아)' },
-  { hangul: '자', label: 'Jieut + A (자)' },
-  { hangul: '차', label: 'Chieut + A (차)' },
+  {
+    hangul: '가',
+    label: {
+      'zh-CN': 'ㄱ (기역) + ㅏ = 가',
+      'zh-TW': 'ㄱ (기역) + ㅏ = 가',
+      'en': 'Giyeok + A (가)',
+    },
+  },
+  {
+    hangul: '나',
+    label: {
+      'zh-CN': 'ㄴ (니은) + ㅏ = 나',
+      'zh-TW': 'ㄴ (니은) + ㅏ = 나',
+      'en': 'Nieun + A (나)',
+    },
+  },
+  {
+    hangul: '다',
+    label: {
+      'zh-CN': 'ㄷ (디귿) + ㅏ = 다',
+      'zh-TW': 'ㄷ (디귿) + ㅏ = 다',
+      'en': 'Digeut + A (다)',
+    },
+  },
+  {
+    hangul: '라',
+    label: {
+      'zh-CN': 'ㄹ (리을) + ㅏ = 라',
+      'zh-TW': 'ㄹ (리을) + ㅏ = 라',
+      'en': 'Rieul + A (라)',
+    },
+  },
+  {
+    hangul: '마',
+    label: {
+      'zh-CN': 'ㅁ (미음) + ㅏ = 마',
+      'zh-TW': 'ㅁ (미음) + ㅏ = 마',
+      'en': 'Mieum + A (마)',
+    },
+  },
+  {
+    hangul: '바',
+    label: {
+      'zh-CN': 'ㅂ (비읍) + ㅏ = 바',
+      'zh-TW': 'ㅂ (비읍) + ㅏ = 바',
+      'en': 'Bieup + A (바)',
+    },
+  },
+  {
+    hangul: '사',
+    label: {
+      'zh-CN': 'ㅅ (시옷) + ㅏ = 사',
+      'zh-TW': 'ㅅ (시옷) + ㅏ = 사',
+      'en': 'Siot + A (사)',
+    },
+  },
+  {
+    hangul: '아',
+    label: {
+      'zh-CN': 'ㅇ (이응) + ㅏ = 아',
+      'zh-TW': 'ㅇ (이응) + ㅏ = 아',
+      'en': 'Ieung + A (아)',
+    },
+  },
+  {
+    hangul: '자',
+    label: {
+      'zh-CN': 'ㅈ (지읒) + ㅏ = 자',
+      'zh-TW': 'ㅈ (지읒) + ㅏ = 자',
+      'en': 'Jieut + A (자)',
+    },
+  },
+  {
+    hangul: '차',
+    label: {
+      'zh-CN': 'ㅊ (치읓) + ㅏ = 차',
+      'zh-TW': 'ㅊ (치읓) + ㅏ = 차',
+      'en': 'Chieut + A (차)',
+    },
+  },
 ];
 
 export const AudioCommuterModal: React.FC<AudioCommuterModalProps> = ({
   isOpen,
   onClose,
   onSpeak,
+  locale,
   t,
 }) => {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [isPlayingQueue, setIsPlayingQueue] = useState<boolean>(false);
   const [hideText, setHideText] = useState<boolean>(false); // Audio Blind Test
-  const [speedMultiplier, setSpeedMultiplier] = useState<number>(2500); // 2.5 sec pause
+  const [speedMultiplier] = useState<number>(2500); // 2.5 sec pause
 
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -52,11 +124,12 @@ export const AudioCommuterModal: React.FC<AudioCommuterModalProps> = ({
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
     };
-  }, [isPlayingQueue, currentIndex, isOpen, speedMultiplier]);
+  }, [isPlayingQueue, currentIndex, isOpen, speedMultiplier, onSpeak]);
 
   if (!isOpen) return null;
 
   const currentItem = COMMUTER_DRILL_ITEMS[currentIndex];
+  const itemLabel = currentItem.label[locale] || currentItem.label['en'];
 
   const handleNext = () => {
     setCurrentIndex((prev) => (prev + 1) % COMMUTER_DRILL_ITEMS.length);
@@ -107,11 +180,11 @@ export const AudioCommuterModal: React.FC<AudioCommuterModalProps> = ({
             className="absolute top-4 right-4 flex items-center gap-1.5 bg-white/20 hover:bg-white/30 backdrop-blur-md px-3 py-1.5 rounded-full text-xs font-semibold transition-colors"
           >
             {hideText ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
-            <span>{hideText ? 'Blind Test Active' : 'Hide Text'}</span>
+            <span>{hideText ? t.commuterBlindTestActive : t.commuterHideText}</span>
           </button>
 
           <div className="text-xs uppercase tracking-widest font-semibold text-indigo-200">
-            Track {currentIndex + 1} of {COMMUTER_DRILL_ITEMS.length}
+            {t.commuterTrackCount} {currentIndex + 1} / {COMMUTER_DRILL_ITEMS.length}
           </div>
 
           {/* Main Character Display */}
@@ -120,7 +193,7 @@ export const AudioCommuterModal: React.FC<AudioCommuterModalProps> = ({
           </div>
 
           <div className="text-xs font-semibold text-indigo-100 bg-white/10 px-4 py-1.5 rounded-full">
-            {hideText ? 'Audio Blind Test (Tap eye to reveal)' : currentItem.label}
+            {hideText ? t.commuterBlindHint : itemLabel}
           </div>
 
           {/* Controls Bar */}

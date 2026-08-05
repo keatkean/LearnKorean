@@ -213,6 +213,7 @@ export default function Home() {
         isOpen={isCommuterOpen}
         onClose={() => setIsCommuterOpen(false)}
         onSpeak={(text) => speak(text)}
+        locale={locale}
         t={t}
       />
     </div>
