@@ -39,6 +39,12 @@ export interface Translations {
   btnPronunciation: string;
   btnVocabExplorer: string;
   btnCommuterMode: string;
+  allToolsBtn: string;
+  drawerTitle: string;
+  drawerSubtitle: string;
+  categoryPractice: string;
+  categoryGames: string;
+  categoryStudy: string;
 
   // Syllable Builder Modal
   builderTitle: string;
@@ -154,13 +160,13 @@ export const dictionaries: Record<Locale, Translations> = {
     quizBtn: '听力测验',
     searchPlaceholder: '搜索韩语/罗马音 (例: ka, 가)',
     tabBasic: '基本音',
-    tabBasicSub: '14×10 原图结构',
-    tabTense: '⭐ 补全：紧辅音',
+    tabBasicSub: '14×10',
+    tabTense: '⭐ 紧辅音',
     tabTenseSub: '5×10',
-    tabComplex: '⭐ 补全：复元音',
+    tabComplex: '⭐ 复元音',
     tabComplexSub: '14×11',
-    tabFull: '完整四十音总表',
-    tabFullSub: '19×21 (399音节)',
+    tabFull: '四十音总表',
+    tabFullSub: '19×21',
     consonantVowelHeader: '辅音 \\ 元音',
     consonantTag: '双辅音',
     vowelTag: '补全',
@@ -183,6 +189,12 @@ export const dictionaries: Record<Locale, Translations> = {
     btnPronunciation: '语音评估',
     btnVocabExplorer: 'K-Pop/剧词典',
     btnCommuterMode: '随身听模式',
+    allToolsBtn: '全部工具 (10)',
+    drawerTitle: '🛠️ 全部 10 款学习工具',
+    drawerSubtitle: '分类直达各类韩语拼音、打字、跟读与记忆练习',
+    categoryPractice: '🧩 拼音与笔顺练习',
+    categoryGames: '🎮 语音评估与打字',
+    categoryStudy: '🎓 随身听与卡片复习',
 
     builderTitle: '🧩 韩语拼音组合沙盒',
     builderSubtitle: '自由选择 初声(辅音) + 中声(元音) + 终声(收音) 实时合成 Unicode 拼音',
@@ -286,13 +298,13 @@ export const dictionaries: Record<Locale, Translations> = {
     quizBtn: '聽力測驗',
     searchPlaceholder: '搜尋韓語/羅馬拼音 (例: ka, 가)',
     tabBasic: '基本音',
-    tabBasicSub: '14×10 原圖結構',
-    tabTense: '⭐ 補全：緊輔音',
+    tabBasicSub: '14×10',
+    tabTense: '⭐ 緊輔音',
     tabTenseSub: '5×10',
-    tabComplex: '⭐ 補全：複元音',
+    tabComplex: '⭐ 複元音',
     tabComplexSub: '14×11',
-    tabFull: '完整四十音總表',
-    tabFullSub: '19×21 (399音節)',
+    tabFull: '四十音總表',
+    tabFullSub: '19×21',
     consonantVowelHeader: '輔音 \\ 母音',
     consonantTag: '雙輔音',
     vowelTag: '補全',
@@ -315,6 +327,12 @@ export const dictionaries: Record<Locale, Translations> = {
     btnPronunciation: '語音評估',
     btnVocabExplorer: 'K-Pop/劇詞典',
     btnCommuterMode: '隨身聽模式',
+    allToolsBtn: '全部工具 (10)',
+    drawerTitle: '🛠️ 全部 10 款學習工具',
+    drawerSubtitle: '分類直達各類韓語拼音、打字、跟讀與記憶練習',
+    categoryPractice: '🧩 拼音與筆順練習',
+    categoryGames: '🎮 語音評估與打字',
+    categoryStudy: '🎓 隨身聽與卡片複習',
 
     builderTitle: '🧩 韓語拼音組合沙盒',
     builderSubtitle: '自由選擇 初聲(輔音) + 中聲(母音) + 終聲(收音) 實時合成 Unicode 拼音',
@@ -413,8 +431,8 @@ export const dictionaries: Record<Locale, Translations> = {
     title: 'Korean 40-Sound Hangul Chart',
     subtitle: 'Interactive audio chart for 19 consonants & 21 vowels',
     badge: 'TTS Audio',
-    guideBtn: 'Guide',
-    flashcardBtn: 'Cards',
+    guideBtn: 'Phonetics',
+    flashcardBtn: 'Flashcards',
     quizBtn: 'Quiz',
     searchPlaceholder: 'Search Hangul/Romaja...',
     tabBasic: 'Basic',
@@ -440,13 +458,19 @@ export const dictionaries: Record<Locale, Translations> = {
     speedFast: '1.0x',
     stopBtn: 'Stop',
 
-    btnSyllableBuilder: 'Syllable Sandbox',
+    btnSyllableBuilder: 'Syllable Builder',
     btnStrokeOrder: 'Stroke Order',
-    btnVocalTract: 'Mouth Guide',
+    btnVocalTract: 'Vocal Tract',
     btnTypingGame: 'Typing Game',
     btnPronunciation: 'Mic Evaluator',
-    btnVocabExplorer: 'K-Vocab Explorer',
-    btnCommuterMode: 'Audio Commuter',
+    btnVocabExplorer: 'K-Vocab',
+    btnCommuterMode: 'Commuter',
+    allToolsBtn: 'All Tools (10)',
+    drawerTitle: '🛠️ All 10 Learning Tools',
+    drawerSubtitle: 'Categorized access to practice tools, audio drills, and games',
+    categoryPractice: '🧩 Phonetics & Writing',
+    categoryGames: '🎮 Speaking & Games',
+    categoryStudy: '🎓 Study & Flashcards',
 
     builderTitle: '🧩 Hangul Syllable Builder Sandbox',
     builderSubtitle: 'Select Initial + Medial + Final block to compose Hangul',

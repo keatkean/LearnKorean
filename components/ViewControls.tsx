@@ -48,11 +48,11 @@ export const ViewControls: React.FC<ViewControlsProps> = ({
   return (
     <nav className="bg-white/90 dark:bg-gray-900/90 border border-slate-200 dark:border-gray-800 rounded-2xl p-3 sm:p-3.5 sticky top-2 z-20 shadow-sm backdrop-blur-md flex flex-col xl:flex-row items-center justify-between gap-3">
       {/* Category Tabs */}
-      <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2">
+      <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center justify-center gap-1.5 sm:gap-2 w-full sm:w-auto">
         {tabs.map((tab) => {
           const isActive = currentMode === tab.id;
           let buttonClass =
-            'px-3 py-1.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200 flex items-center gap-1.5 cursor-pointer outline-none select-none border whitespace-nowrap ';
+            'w-full sm:w-auto px-2 sm:px-3 py-1.5 rounded-xl sm:rounded-full text-[11px] sm:text-xs font-semibold transition-all duration-200 flex items-center justify-center gap-1 sm:gap-1.5 cursor-pointer outline-none select-none border whitespace-nowrap ';
 
           if (isActive) {
             if (tab.highlight) {

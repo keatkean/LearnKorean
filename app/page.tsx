@@ -18,6 +18,7 @@ import { TypingGameModal } from '@/components/TypingGameModal';
 import { PronunciationEvaluatorModal } from '@/components/PronunciationEvaluatorModal';
 import { VocabExplorerModal } from '@/components/VocabExplorerModal';
 import { AudioCommuterModal } from '@/components/AudioCommuterModal';
+import { ToolsDrawerModal } from '@/components/ToolsDrawerModal';
 import { Sparkles, Lightbulb } from 'lucide-react';
 
 export default function Home() {
@@ -37,6 +38,7 @@ export default function Home() {
   const [isEvaluatorOpen, setIsEvaluatorOpen] = useState<boolean>(false);
   const [isVocabOpen, setIsVocabOpen] = useState<boolean>(false);
   const [isCommuterOpen, setIsCommuterOpen] = useState<boolean>(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
 
   const t = dictionaries[locale];
 
@@ -92,6 +94,7 @@ export default function Home() {
         onOpenEvaluator={() => setIsEvaluatorOpen(true)}
         onOpenVocab={() => setIsVocabOpen(true)}
         onOpenCommuter={() => setIsCommuterOpen(true)}
+        onOpenDrawer={() => setIsDrawerOpen(true)}
       />
 
       {/* Main Content Area */}
@@ -215,6 +218,22 @@ export default function Home() {
         onSpeak={(text) => speak(text)}
         locale={locale}
         t={t}
+      />
+
+      <ToolsDrawerModal
+        isOpen={isDrawerOpen}
+        onClose={() => setIsDrawerOpen(false)}
+        t={t}
+        onOpenFlashcard={() => setIsFlashcardOpen(true)}
+        onOpenQuiz={() => setIsQuizOpen(true)}
+        onOpenGuide={() => setIsGuideOpen(true)}
+        onOpenBuilder={() => setIsBuilderOpen(true)}
+        onOpenStrokeCanvas={() => setIsStrokeCanvasOpen(true)}
+        onOpenVocalTract={() => setIsVocalTractOpen(true)}
+        onOpenTypingGame={() => setIsTypingGameOpen(true)}
+        onOpenEvaluator={() => setIsEvaluatorOpen(true)}
+        onOpenVocab={() => setIsVocabOpen(true)}
+        onOpenCommuter={() => setIsCommuterOpen(true)}
       />
     </div>
   );
